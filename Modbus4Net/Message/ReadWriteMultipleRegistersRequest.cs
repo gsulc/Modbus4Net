@@ -35,7 +35,7 @@ namespace Modbus4Net.Message
                 writeData);
 
             // TODO: ugly hack for all ModbusSerialTransport-inheritances (ModbusIpTransport would not need this, as it implements complete different BuildMessageFrame)
-
+            
             // fake ByteCount, Data can hold only even number of bytes
             ByteCount = (ProtocolDataUnit[1]);
 
@@ -109,6 +109,12 @@ namespace Modbus4Net.Message
 
             _readRequest = ModbusMessageFactory.CreateModbusMessage<ReadHoldingInputRegistersRequest>(readFrame);
             _writeRequest = ModbusMessageFactory.CreateModbusMessage<WriteMultipleRegistersRequest>(writeFrame);
+
+            // fake ByteCount, Data can hold only even number of bytes
+            ByteCount = (ProtocolDataUnit[1]);
+
+            // fake Data, as this modbusmessage does not fit ModbusMessageImpl
+            Data = new RegisterCollection(ProtocolDataUnit.Slice(2, ProtocolDataUnit.Length - 2).ToArray());
         }
     }
 }
