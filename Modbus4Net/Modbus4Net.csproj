@@ -2,12 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Modbus4NetPrivateKey.snk</AssemblyOriginatorKeyFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>$(MSBuildProjectName).UnitTests</_Parameter1>
+      <_Parameter1>
+        $(MSBuildProjectName).UnitTests, PublicKey=00240000048000009400000006020000002400005253413100040000010001000555994ba1fda0810ef8057575486d726d9fb21f7ac24486363b80357cd478eb4a3f9a9fbf827131af630e644d0468d7c64d986bf0b97f07b4de62e1915e38620e11c7f482cc57ed8a2cbe32ace9266aea4f402974a53b49f4bdb53f7e92b35564634fefbc44c962814da71b7329f36fcc392d8fbc79b87e6bf59b102910b5b5
+      </_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
