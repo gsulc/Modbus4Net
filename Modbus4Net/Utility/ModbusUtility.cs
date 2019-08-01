@@ -6,7 +6,7 @@ using System.Text;
 namespace Modbus4Net.Utility
 {
     /// <summary>
-    ///     Modbus utility methods.
+    /// Modbus utility methods.
     /// </summary>
     public static class ModbusUtility
     {
@@ -47,7 +47,7 @@ namespace Modbus4Net.Utility
         };
 
         /// <summary>
-        ///     Converts four UInt16 values into a IEEE 64 floating point format.
+        /// Converts four UInt16 values into a IEEE 64 floating point format.
         /// </summary>
         /// <param name="b3">Highest-order ushort value.</param>
         /// <param name="b2">Second-to-highest-order ushort value.</param>
@@ -66,7 +66,7 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Converts two UInt16 values into a IEEE 32 floating point format.
+        /// Converts two UInt16 values into a IEEE 32 floating point format.
         /// </summary>
         /// <param name="highOrderValue">High order ushort value.</param>
         /// <param name="lowOrderValue">Low order ushort value.</param>
@@ -81,7 +81,7 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Converts two UInt16 values into a UInt32.
+        /// Converts two UInt16 values into a UInt32.
         /// </summary>
         public static uint GetUInt32(ushort highOrderValue, ushort lowOrderValue)
         {
@@ -93,7 +93,7 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Converts an array of bytes to an ASCII byte array.
+        /// Converts an array of bytes to an ASCII byte array.
         /// </summary>
         /// <param name="numbers">The byte array.</param>
         /// <returns>An array of ASCII byte values.</returns>
@@ -103,7 +103,7 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Converts an array of UInt16 to an ASCII byte array.
+        /// Converts an array of UInt16 to an ASCII byte array.
         /// </summary>
         /// <param name="numbers">The ushort array.</param>
         /// <returns>An array of ASCII byte values.</returns>
@@ -113,77 +113,61 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Converts a network order byte array to an array of UInt16 values in host order.
+        /// Converts a network order byte array to an array of UInt16 values in host order.
         /// </summary>
         /// <param name="networkBytes">The network order byte array.</param>
         /// <returns>The host order ushort array.</returns>
         public static ushort[] NetworkBytesToHostUInt16(byte[] networkBytes)
         {
             if (networkBytes == null)
-            {
                 throw new ArgumentNullException(nameof(networkBytes));
-            }
 
             if (networkBytes.Length % 2 != 0)
-            {
                 throw new FormatException(Resources.NetworkBytesNotEven);
-            }
 
             ushort[] result = new ushort[networkBytes.Length / 2];
 
             for (int i = 0; i < result.Length; i++)
-            {
                 result[i] = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(networkBytes, i * 2));
-            }
 
             return result;
         }
 
         /// <summary>
-        ///     Converts a hex string to a byte array.
+        /// Converts a hex string to a byte array.
         /// </summary>
         /// <param name="hex">The hex string.</param>
         /// <returns>Array of bytes.</returns>
         public static byte[] HexToBytes(string hex)
         {
             if (hex == null)
-            {
                 throw new ArgumentNullException(nameof(hex));
-            }
 
             if (hex.Length % 2 != 0)
-            {
                 throw new FormatException(Resources.HexCharacterCountNotEven);
-            }
 
             byte[] bytes = new byte[hex.Length / 2];
 
             for (int i = 0; i < bytes.Length; i++)
-            {
                 bytes[i] = Convert.ToByte(hex.Substring(i * 2, 2), 16);
-            }
 
             return bytes;
         }
 
         /// <summary>
-        ///     Calculate Longitudinal Redundancy Check.
+        /// Calculate Longitudinal Redundancy Check.
         /// </summary>
         /// <param name="data">The data used in LRC.</param>
         /// <returns>LRC value.</returns>
         public static byte CalculateLrc(byte[] data)
         {
             if (data == null)
-            {
                 throw new ArgumentNullException(nameof(data));
-            }
 
             byte lrc = 0;
 
             foreach (byte b in data)
-            {
                 lrc += b;
-            }
 
             lrc = (byte)((lrc ^ 0xFF) + 1);
 
@@ -191,16 +175,14 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Calculate Cyclical Redundancy Check.
+        /// Calculate Cyclical Redundancy Check.
         /// </summary>
         /// <param name="data">The data used in CRC.</param>
         /// <returns>CRC value.</returns>
         public static byte[] CalculateCrc(byte[] data)
         {
             if (data == null)
-            {
                 throw new ArgumentNullException(nameof(data));
-            }
 
             ushort crc = ushort.MaxValue;
 

@@ -29,7 +29,7 @@ namespace Modbus4Net.Device.MessageHandlers
         {
             ushort[] registers = dataStore.InputRegisters.ReadPoints(request.StartAddress, request.NumberOfPoints);
 
-            RegisterCollection regsiterCollection = new RegisterCollection(registers);
+            var regsiterCollection = new RegisterCollection(registers);
 
             return new ReadHoldingInputRegistersResponse(request.FunctionCode, request.SlaveAddress, regsiterCollection);
         }

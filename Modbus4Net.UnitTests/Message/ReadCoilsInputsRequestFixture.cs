@@ -1,5 +1,5 @@
-﻿using System;
-using Modbus4Net.Message;
+﻿using Modbus4Net.Message;
+using System;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Message
@@ -9,7 +9,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateReadCoilsRequest()
         {
-            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 5, 1, 10);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 5, 1, 10);
             Assert.Equal(ModbusFunctionCodes.ReadCoils, request.FunctionCode);
             Assert.Equal(5, request.SlaveAddress);
             Assert.Equal(1, request.StartAddress);
@@ -19,7 +19,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateReadInputsRequest()
         {
-            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 5, 1, 10);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 5, 1, 10);
             Assert.Equal(ModbusFunctionCodes.ReadInputs, request.FunctionCode);
             Assert.Equal(5, request.SlaveAddress);
             Assert.Equal(1, request.StartAddress);
@@ -35,7 +35,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateReadCoilsInputsRequestMaxSize()
         {
-            ReadCoilsInputsRequest response = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 2,
+            var response = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 2,
                 Modbus.MaximumDiscreteRequestResponseSize);
             Assert.Equal(Modbus.MaximumDiscreteRequestResponseSize, response.NumberOfPoints);
         }
@@ -43,7 +43,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void ToString_ReadCoilsRequest()
         {
-            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 5, 1, 10);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 5, 1, 10);
 
             Assert.Equal("Read 10 coils starting at address 1.", request.ToString());
         }
@@ -51,7 +51,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void ToString_ReadInputsRequest()
         {
-            ReadCoilsInputsRequest request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 5, 1, 10);
+            var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadInputs, 5, 1, 10);
 
             Assert.Equal("Read 10 inputs starting at address 1.", request.ToString());
         }

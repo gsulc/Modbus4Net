@@ -1,7 +1,7 @@
 ﻿namespace Modbus4Net
 {
     /// <summary>
-    ///     Defines constants related to the Modbus protocol.
+    /// Defines constants related to the Modbus protocol.
     /// </summary>
     internal static class Modbus
     {

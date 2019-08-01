@@ -15,7 +15,7 @@ namespace Modbus4Net.Device
 #endif
 
     /// <summary>
-    ///     Modbus TCP slave device.
+    /// Modbus TCP slave device.
     /// </summary>
     internal class ModbusTcpSlaveNetwork : ModbusSlaveNetwork
     {
@@ -32,24 +32,14 @@ namespace Modbus4Net.Device
         internal ModbusTcpSlaveNetwork(TcpListener tcpListener, IModbusFactory modbusFactory, IModbusLogger logger)
             : base(new EmptyTransport(modbusFactory), modbusFactory, logger)
         {
-            if (tcpListener == null)
-            {
-                throw new ArgumentNullException(nameof(tcpListener));
-            }
-
-            _server = tcpListener;
+            _server = tcpListener ?? throw new ArgumentNullException(nameof(tcpListener));
         }
 
 #if TIMER
         private ModbusTcpSlave(byte unitId, TcpListener tcpListener, double timeInterval)
             : base(unitId, new EmptyTransport())
         {
-            if (tcpListener == null)
-            {
-                throw new ArgumentNullException(nameof(tcpListener));
-            }
-
-            _server = tcpListener;
+            _server = tcpListener ?? throw new ArgumentNullException(nameof(tcpListener));
             _timer = new Timer(timeInterval);
             _timer.Elapsed += OnTimer;
             _timer.Enabled = true;
@@ -57,48 +47,32 @@ namespace Modbus4Net.Device
 #endif
 
         /// <summary>
-        ///     Gets the Modbus TCP Masters connected to this Modbus TCP Slave.
+        /// Gets the Modbus TCP Masters connected to this Modbus TCP Slave.
         /// </summary>
-        public ReadOnlyCollection<TcpClient> Masters
-        {
-            get
-            {
-                return new ReadOnlyCollection<TcpClient>(_masters.Values.Select(mc => mc.TcpClient).ToList());
-            }
-        }
+        public ReadOnlyCollection<TcpClient> Masters => new ReadOnlyCollection<TcpClient>(_masters.Values.Select(mc => mc.TcpClient).ToList());
 
         /// <summary>
-        ///     Gets the server.
+        /// Gets the server.
         /// </summary>
         /// <value>The server.</value>
         /// <remarks>
-        ///     This property is not thread safe, it should only be consumed within a lock.
+        /// This property is not thread safe, it should only be consumed within a lock.
         /// </remarks>
         private TcpListener Server
         {
             get
             {
                 if (_server == null)
-                {
                     throw new ObjectDisposedException("Server");
-                }
 
                 return _server;
             }
         }
 
-        ///// <summary>
-        /////     Modbus TCP slave factory method.
-        ///// </summary>
-        //public static ModbusTcpSlave CreateTcp(byte unitId, TcpListener tcpListener)
-        //{
-        //    return new ModbusTcpSlave(unitId, tcpListener);
-        //}
-
 #if TIMER
         /// <summary>
-        ///     Creates ModbusTcpSlave with timer which polls connected clients every
-        ///     <paramref name="pollInterval"/> milliseconds on that they are connected.
+        /// Creates ModbusTcpSlave with timer which polls connected clients every
+        /// <paramref name="pollInterval"/> milliseconds on that they are connected.
         /// </summary>
         public static ModbusTcpSlave CreateTcp(byte unitId, TcpListener tcpListener, double pollInterval)
         {
@@ -107,7 +81,7 @@ namespace Modbus4Net.Device
 #endif
 
         /// <summary>
-        ///     Start slave listening for requests.
+        /// Start slave listening for requests.
         /// </summary>
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -125,11 +99,11 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///     Releases unmanaged and - optionally - managed resources
+        /// Releases unmanaged and - optionally - managed resources
         /// </summary>
         /// <param name="disposing">
-        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
-        ///     unmanaged resources.
+        /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        /// unmanaged resources.
         /// </param>
         /// <remarks>Dispose is thread-safe.</remarks>
         protected override void Dispose(bool disposing)
@@ -154,11 +128,10 @@ namespace Modbus4Net.Device
                             }
 #endif
 
-                            foreach (var key in _masters.Keys)
+                            foreach (string key in _masters.Keys)
                             {
-                                ModbusMasterTcpConnection connection;
 
-                                if (_masters.TryRemove(key, out connection))
+                                if (_masters.TryRemove(key, out ModbusMasterTcpConnection connection))
                                 {
                                     connection.ModbusMasterTcpConnectionClosed -= OnMasterConnectionClosedHandler;
                                     connection.Dispose();
@@ -191,9 +164,8 @@ namespace Modbus4Net.Device
 #endif
         private void OnMasterConnectionClosedHandler(object sender, TcpConnectionEventArgs e)
         {
-            ModbusMasterTcpConnection connection;
 
-            if (!_masters.TryRemove(e.EndPoint, out connection))
+            if (!_masters.TryRemove(e.EndPoint, out ModbusMasterTcpConnection connection))
             {
                 string msg = $"EndPoint {e.EndPoint} cannot be removed, it does not exist.";
                 throw new ArgumentException(msg);

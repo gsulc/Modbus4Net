@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 namespace Modbus4Net
 {
     /// <summary>
-    ///     Modbus master device.
+    /// Modbus master device.
     /// </summary>
     public interface IModbusMaster : IDisposable
     {
         /// <summary>
-        ///     Transport used by this master.
+        /// Transport used by this master.
         /// </summary>
         IModbusTransport Transport { get; }
 
         /// <summary>
-        ///    Reads from 1 to 2000 contiguous coils status.
+        /// Reads from 1 to 2000 contiguous coils status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -23,7 +23,7 @@ namespace Modbus4Net
         bool[] ReadCoils(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Asynchronously reads from 1 to 2000 contiguous coils status.
+        /// Asynchronously reads from 1 to 2000 contiguous coils status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -32,7 +32,7 @@ namespace Modbus4Net
         Task<bool[]> ReadCoilsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Reads from 1 to 2000 contiguous discrete input status.
+        /// Reads from 1 to 2000 contiguous discrete input status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -41,7 +41,7 @@ namespace Modbus4Net
         bool[] ReadInputs(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Asynchronously reads from 1 to 2000 contiguous discrete input status.
+        /// Asynchronously reads from 1 to 2000 contiguous discrete input status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -50,7 +50,7 @@ namespace Modbus4Net
         Task<bool[]> ReadInputsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Reads contiguous block of holding registers.
+        /// Reads contiguous block of holding registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -59,7 +59,7 @@ namespace Modbus4Net
         ushort[] ReadHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Asynchronously reads contiguous block of holding registers.
+        /// Asynchronously reads contiguous block of holding registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -68,7 +68,7 @@ namespace Modbus4Net
         Task<ushort[]> ReadHoldingRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Reads contiguous block of input registers.
+        /// Reads contiguous block of input registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -77,7 +77,7 @@ namespace Modbus4Net
         ushort[] ReadInputRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Asynchronously reads contiguous block of input registers.
+        /// Asynchronously reads contiguous block of input registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -86,7 +86,7 @@ namespace Modbus4Net
         Task<ushort[]> ReadInputRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints);
 
         /// <summary>
-        ///    Writes a single coil value.
+        /// Writes a single coil value.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="coilAddress">Address to write value to.</param>
@@ -94,7 +94,7 @@ namespace Modbus4Net
         void WriteSingleCoil(byte slaveAddress, ushort coilAddress, bool value);
 
         /// <summary>
-        ///    Asynchronously writes a single coil value.
+        /// Asynchronously writes a single coil value.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="coilAddress">Address to write value to.</param>
@@ -103,7 +103,7 @@ namespace Modbus4Net
         Task WriteSingleCoilAsync(byte slaveAddress, ushort coilAddress, bool value);
 
         /// <summary>
-        ///    Writes a single holding register.
+        /// Writes a single holding register.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="registerAddress">Address to write.</param>
@@ -111,7 +111,7 @@ namespace Modbus4Net
         void WriteSingleRegister(byte slaveAddress, ushort registerAddress, ushort value);
 
         /// <summary>
-        ///    Asynchronously writes a single holding register.
+        /// Asynchronously writes a single holding register.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="registerAddress">Address to write.</param>
@@ -120,7 +120,7 @@ namespace Modbus4Net
         Task WriteSingleRegisterAsync(byte slaveAddress, ushort registerAddress, ushort value);
 
         /// <summary>
-        ///    Writes a block of 1 to 123 contiguous registers.
+        /// Writes a block of 1 to 123 contiguous registers.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -128,7 +128,7 @@ namespace Modbus4Net
         void WriteMultipleRegisters(byte slaveAddress, ushort startAddress, ushort[] data);
 
         /// <summary>
-        ///    Asynchronously writes a block of 1 to 123 contiguous registers.
+        /// Asynchronously writes a block of 1 to 123 contiguous registers.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -137,7 +137,7 @@ namespace Modbus4Net
         Task WriteMultipleRegistersAsync(byte slaveAddress, ushort startAddress, ushort[] data);
 
         /// <summary>
-        ///    Writes a sequence of coils.
+        /// Writes a sequence of coils.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -145,7 +145,7 @@ namespace Modbus4Net
         void WriteMultipleCoils(byte slaveAddress, ushort startAddress, bool[] data);
 
         /// <summary>
-        ///    Asynchronously writes a sequence of coils.
+        /// Asynchronously writes a sequence of coils.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -154,8 +154,8 @@ namespace Modbus4Net
         Task WriteMultipleCoilsAsync(byte slaveAddress, ushort startAddress, bool[] data);
 
         /// <summary>
-        ///    Performs a combination of one read operation and one write operation in a single Modbus transaction.
-        ///    The write operation is performed before the read.
+        /// Performs a combination of one read operation and one write operation in a single Modbus transaction.
+        /// The write operation is performed before the read.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startReadAddress">Address to begin reading (Holding registers are addressed starting at 0).</param>
@@ -170,8 +170,8 @@ namespace Modbus4Net
             ushort[] writeData);
 
         /// <summary>
-        ///    Asynchronously performs a combination of one read operation and one write operation in a single Modbus transaction.
-        ///    The write operation is performed before the read.
+        /// Asynchronously performs a combination of one read operation and one write operation in a single Modbus transaction.
+        /// The write operation is performed before the read.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startReadAddress">Address to begin reading (Holding registers are addressed starting at 0).</param>
@@ -187,7 +187,7 @@ namespace Modbus4Net
             ushort[] writeData);
 
         /// <summary>
-        ///    Executes the custom message.
+        /// Executes the custom message.
         /// </summary>
         /// <typeparam name="TResponse">The type of the response.</typeparam>
         /// <param name="request">The request.</param>

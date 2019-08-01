@@ -18,16 +18,19 @@ namespace Modbus4Net.IO
         public ModbusIpTransport(IStreamResource streamResource, IModbusFactory modbusFactory, IModbusLogger logger)
             : base(streamResource, modbusFactory, logger)
         {
-            if (streamResource == null) throw new ArgumentNullException(nameof(streamResource));
+            if (streamResource == null)
+                throw new ArgumentNullException(nameof(streamResource));
         }
 
         public static byte[] ReadRequestResponse(IStreamResource streamResource, IModbusLogger logger)
         {
-            if (streamResource == null) throw new ArgumentNullException(nameof(streamResource));
-            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            if (streamResource == null)
+                throw new ArgumentNullException(nameof(streamResource));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
 
             // read header
-            var mbapHeader = new byte[6];
+            byte[] mbapHeader = new byte[6];
             int numBytesRead = 0;
 
             while (numBytesRead != 6)
@@ -35,19 +38,17 @@ namespace Modbus4Net.IO
                 int bRead = streamResource.Read(mbapHeader, numBytesRead, 6 - numBytesRead);
 
                 if (bRead == 0)
-                {
                     throw new IOException("Read resulted in 0 bytes returned.");
-                }
 
                 numBytesRead += bRead;
             }
 
             logger.Debug($"MBAP header: {string.Join(", ", mbapHeader)}");
-            var frameLength = (ushort)IPAddress.HostToNetworkOrder(BitConverter.ToInt16(mbapHeader, 4));
+            ushort frameLength = (ushort)IPAddress.HostToNetworkOrder(BitConverter.ToInt16(mbapHeader, 4));
             logger.Debug($"{frameLength} bytes in PDU.");
 
             // read message
-            var messageFrame = new byte[frameLength];
+            byte[] messageFrame = new byte[frameLength];
             numBytesRead = 0;
 
             while (numBytesRead != frameLength)
@@ -55,15 +56,13 @@ namespace Modbus4Net.IO
                 int bRead = streamResource.Read(messageFrame, numBytesRead, frameLength - numBytesRead);
 
                 if (bRead == 0)
-                {
                     throw new IOException("Read resulted in 0 bytes returned.");
-                }
 
                 numBytesRead += bRead;
             }
 
             logger.Debug($"PDU: {frameLength}");
-            var frame = mbapHeader.Concat(messageFrame).ToArray();
+            byte[] frame = mbapHeader.Concat(messageFrame).ToArray();
             logger.Debug($"RX: {string.Join(", ", frame)}");
 
             return frame;
@@ -85,7 +84,7 @@ namespace Modbus4Net.IO
         }
 
         /// <summary>
-        ///     Create a new transaction ID.
+        /// Create a new transaction ID.
         /// </summary>
         public virtual ushort GetNewTransactionId()
         {

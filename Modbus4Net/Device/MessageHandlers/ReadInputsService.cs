@@ -29,7 +29,7 @@ namespace Modbus4Net.Device.MessageHandlers
         {
             bool[] discretes = dataStore.CoilInputs.ReadPoints(request.StartAddress, request.NumberOfPoints);
 
-            DiscreteCollection data = new DiscreteCollection(discretes);
+            var data = new DiscreteCollection(discretes);
 
             return new ReadCoilsInputsResponse(
                 request.FunctionCode,

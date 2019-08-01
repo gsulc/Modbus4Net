@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Modbus4Net.IO;
+using System;
 using System.Net.Sockets;
-using Modbus4Net.IO;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.IO

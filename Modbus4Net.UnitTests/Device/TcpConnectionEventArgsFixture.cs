@@ -1,5 +1,5 @@
-﻿using System;
-using Modbus4Net.Device;
+﻿using Modbus4Net.Device;
+using System;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Device

@@ -40,7 +40,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///     Occurs when a Modbus master TCP connection is closed.
+        /// Occurs when a Modbus master TCP connection is closed.
         /// </summary>
         public event EventHandler<TcpConnectionEventArgs> ModbusMasterTcpConnectionClosed;
 
@@ -92,7 +92,7 @@ namespace Modbus4Net.Device
                 byte[] frame = _mbapHeader.Concat(_messageFrame).ToArray();
                 Logger.Trace($"RX from Master at {EndPoint}: {string.Join(", ", frame)}");
 
-                var request = _modbusFactory.CreateModbusRequest(_messageFrame);
+                IModbusMessage request = _modbusFactory.CreateModbusRequest(_messageFrame);
                 request.TransactionId = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 0));
 
                 IModbusSlave slave = _slaveNetwork.GetSlave(request.SlaveAddress);

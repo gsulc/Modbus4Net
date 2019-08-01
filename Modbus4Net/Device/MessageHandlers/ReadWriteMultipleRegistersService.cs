@@ -37,7 +37,7 @@ namespace Modbus4Net.Device.MessageHandlers
             ushort[] readPoints = dataStore.HoldingRegisters.ReadPoints(request.ReadRequest.StartAddress,
                 request.ReadRequest.NumberOfPoints);
 
-            RegisterCollection data = new RegisterCollection(readPoints);
+            var data = new RegisterCollection(readPoints);
 
             return new ReadHoldingInputRegistersResponse(
                 request.FunctionCode,

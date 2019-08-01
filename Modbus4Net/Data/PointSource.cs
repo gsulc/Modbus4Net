@@ -48,9 +48,7 @@ namespace Modbus4Net.Data
             lock (_syncRoot)
             {
                 for (ushort index = 0; index < points.Length; index++)
-                {
                     _points.Value[startAddress + index] = points[index];
-                }
             }
         }
 

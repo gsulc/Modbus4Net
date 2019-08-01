@@ -46,13 +46,9 @@ namespace Modbus4Net.Device
                     IModbusMessage response = ApplyRequest(request);
 
                     if (response == null)
-                    {
                         _serialTransport.IgnoreResponse();
-                    }
                     else
-                    {
                         Transport.Write(response);
-                    }
                 }
                 catch (IOException ioe)
                 {

@@ -7,7 +7,7 @@ using System.Threading;
 namespace Modbus4Net.IO
 {
     /// <summary>
-    ///     Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
+    /// Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
     public class TcpClientAdapter : IStreamResource
     {

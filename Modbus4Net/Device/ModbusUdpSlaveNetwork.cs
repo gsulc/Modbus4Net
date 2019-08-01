@@ -14,7 +14,7 @@ namespace Modbus4Net.Device
     using Extensions;
 
     /// <summary>
-    ///     Modbus UDP slave device.
+    /// Modbus UDP slave device.
     /// </summary>
     internal class ModbusUdpSlaveNetwork : ModbusSlaveNetwork
     {
@@ -27,7 +27,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///     Start slave listening for requests.
+        /// Start slave listening for requests.
         /// </summary>
         public override async Task ListenAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -69,9 +69,7 @@ namespace Modbus4Net.Device
             {
                 // this hapens when slave stops
                 if (se.SocketErrorCode != SocketError.Interrupted)
-                {
                     throw;
-                }
             }
         }
     }

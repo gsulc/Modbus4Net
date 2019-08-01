@@ -1,5 +1,5 @@
-﻿using System;
-using Modbus4Net.Message;
+﻿using Modbus4Net.Message;
+using System;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Message
@@ -9,7 +9,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateReadHoldingRegistersRequest()
         {
-            ReadHoldingInputRegistersRequest request = new ReadHoldingInputRegistersRequest(
+            var request = new ReadHoldingInputRegistersRequest(
                 ModbusFunctionCodes.ReadHoldingRegisters, 5, 1, 10);
             Assert.Equal(ModbusFunctionCodes.ReadHoldingRegisters, request.FunctionCode);
             Assert.Equal(5, request.SlaveAddress);
@@ -20,7 +20,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateReadInputRegistersRequest()
         {
-            ReadHoldingInputRegistersRequest request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadInputRegisters, 5,
+            var request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadInputRegisters, 5,
                 1, 10);
             Assert.Equal(ModbusFunctionCodes.ReadInputRegisters, request.FunctionCode);
             Assert.Equal(5, request.SlaveAddress);
@@ -38,7 +38,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateReadHoldingInputRegistersRequestMaxSize()
         {
-            ReadHoldingInputRegistersRequest response = new ReadHoldingInputRegistersRequest(
+            var response = new ReadHoldingInputRegistersRequest(
                 ModbusFunctionCodes.ReadHoldingRegisters, 1, 2, Modbus.MaximumRegisterRequestResponseSize);
             Assert.Equal(Modbus.MaximumRegisterRequestResponseSize, response.NumberOfPoints);
         }
@@ -46,7 +46,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void ToString_ReadHoldingRegistersRequest()
         {
-            ReadHoldingInputRegistersRequest request = new ReadHoldingInputRegistersRequest(
+            var request = new ReadHoldingInputRegistersRequest(
                 ModbusFunctionCodes.ReadHoldingRegisters, 5, 1, 10);
 
             Assert.Equal("Read 10 holding registers starting at address 1.", request.ToString());
@@ -55,7 +55,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void ToString_ReadInputRegistersRequest()
         {
-            ReadHoldingInputRegistersRequest request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadInputRegisters, 5,
+            var request = new ReadHoldingInputRegistersRequest(ModbusFunctionCodes.ReadInputRegisters, 5,
                 1, 10);
 
             Assert.Equal("Read 10 input registers starting at address 1.", request.ToString());

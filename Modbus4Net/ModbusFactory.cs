@@ -37,7 +37,6 @@ namespace Modbus4Net
         public ModbusFactory()
         {
             _functionServices = BuiltInFunctionServices.ToDictionary(s => s.FunctionCode, s => s);
-
             Logger = NullModbusLogger.Instance;
         }
 
@@ -54,27 +53,16 @@ namespace Modbus4Net
         {
             Logger = logger ?? NullModbusLogger.Instance;
 
-            //Determine if we're including the built in services
             if (includeBuiltIn)
-            {
-                //Make a dictionary out of the built in services
-                _functionServices = BuiltInFunctionServices
-                    .ToDictionary(s => s.FunctionCode, s => s);
-            }
+                _functionServices = BuiltInFunctionServices.ToDictionary(s => s.FunctionCode, s => s);
             else
-            {
-                //Create an empty dictionary
                 _functionServices = new Dictionary<byte, IModbusFunctionService>();
-            }
 
             if (functionServices != null)
             {
-                //Add and replace the provided function services as necessary.
+                // Add or replace the provided function services as necessary.
                 foreach (IModbusFunctionService service in functionServices)
-                {
-                    //This will add or replace the service.
                     _functionServices[service.FunctionCode] = service;
-                }
             }
         }
 
@@ -120,9 +108,7 @@ namespace Modbus4Net
 
         public IModbusFunctionService[] GetAllFunctionServices()
         {
-            return _functionServices
-                .Values
-                .ToArray();
+            return _functionServices.Values.ToArray();
         }
 
         public IModbusSerialMaster CreateMaster(IModbusSerialTransport transport)
@@ -133,18 +119,14 @@ namespace Modbus4Net
         public IModbusMaster CreateMaster(UdpClient client)
         {
             var adapter = new UdpClientAdapter(client);
-
             var transport = new ModbusIpTransport(adapter, this, Logger);
-
             return new ModbusIpMaster(transport);
         }
 
         public IModbusMaster CreateMaster(TcpClient client)
         {
             var adapter = new TcpClientAdapter(client);
-
             var transport = new ModbusIpTransport(adapter, this, Logger);
-
             return new ModbusIpMaster(transport);
         }
 

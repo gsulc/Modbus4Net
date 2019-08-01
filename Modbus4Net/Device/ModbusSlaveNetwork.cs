@@ -22,10 +22,7 @@ namespace Modbus4Net.Device
 
         protected IModbusFactory ModbusFactory { get; }
 
-        protected IModbusLogger Logger
-        {
-            get { return _logger; }
-        }
+        protected IModbusLogger Logger => _logger;
 
         /// <summary>
         /// Start slave listening for requests.
@@ -38,15 +35,12 @@ namespace Modbus4Net.Device
         /// <param name="request"></param>
         protected IModbusMessage ApplyRequest(IModbusMessage request)
         {
-            //Check for broadcast requests
-            if (request.SlaveAddress == 0)
+            if (request.SlaveAddress == 0) // broadcast request
             {
-                //Grab each slave
-                foreach (var slave in _slaves.Values)
+                foreach (IModbusSlave slave in _slaves.Values)
                 {
                     try
                     {
-                        //Apply the request
                         slave.ApplyRequest(request);
                     }
                     catch (Exception ex)
@@ -57,19 +51,12 @@ namespace Modbus4Net.Device
             }
             else
             {
-                //Attempt to find a slave for this address
                 IModbusSlave slave = GetSlave(request.SlaveAddress);
 
-                // only service requests addressed to our slaves
                 if (slave == null)
-                {
                     Console.WriteLine($"NModbus Slave Network ignoring request intended for NModbus Slave {request.SlaveAddress}");
-                }
                 else
-                {
-                    // perform action
                     return slave.ApplyRequest(request);
-                }
             }
 
             return null;
@@ -77,7 +64,8 @@ namespace Modbus4Net.Device
 
         public void AddSlave(IModbusSlave slave)
         {
-            if (slave == null) throw new ArgumentNullException(nameof(slave));
+            if (slave == null)
+                throw new ArgumentNullException(nameof(slave));
 
             _slaves.Add(slave.UnitId, slave);
 

@@ -8,7 +8,7 @@ using System.Threading;
 namespace Modbus4Net.IO
 {
     /// <summary>
-    ///     Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
+    /// Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
     public class UdpClientAdapter : IStreamResource
     {
@@ -20,12 +20,7 @@ namespace Modbus4Net.IO
 
         public UdpClientAdapter(UdpClient udpClient)
         {
-            if (udpClient == null)
-            {
-                throw new ArgumentNullException(nameof(udpClient));
-            }
-
-            _udpClient = udpClient;
+            _udpClient = udpClient ?? throw new ArgumentNullException(nameof(udpClient));
         }
 
         public int InfiniteTimeout => Timeout.Infinite;
@@ -50,9 +45,7 @@ namespace Modbus4Net.IO
         public int Read(byte[] buffer, int offset, int count)
         {
             if (buffer == null)
-            {
                 throw new ArgumentNullException(nameof(buffer));
-            }
 
             if (offset < 0)
             {
@@ -83,14 +76,10 @@ namespace Modbus4Net.IO
             }
 
             if (_bufferOffset == 0)
-            {
                 _bufferOffset = _udpClient.Client.Receive(_buffer);
-            }
 
             if (_bufferOffset < count)
-            {
                 throw new IOException("Not enough bytes in the datagram.");
-            }
 
             Buffer.BlockCopy(_buffer, 0, buffer, offset, count);
             _bufferOffset -= count;
@@ -102,9 +91,7 @@ namespace Modbus4Net.IO
         public void Write(byte[] buffer, int offset, int count)
         {
             if (buffer == null)
-            {
                 throw new ArgumentNullException(nameof(buffer));
-            }
 
             if (offset < 0)
             {

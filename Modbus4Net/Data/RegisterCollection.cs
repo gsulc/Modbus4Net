@@ -9,19 +9,19 @@ using System.Net;
 namespace Modbus4Net.Data
 {
     /// <summary>
-    ///     Collection of 16 bit registers.
+    /// Collection of 16 bit registers.
     /// </summary>
     internal class RegisterCollection : Collection<ushort>, IModbusMessageDataCollection
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="RegisterCollection" /> class.
+        /// Initializes a new instance of the <see cref="RegisterCollection" /> class.
         /// </summary>
         public RegisterCollection()
         {
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="RegisterCollection" /> class.
+        /// Initializes a new instance of the <see cref="RegisterCollection" /> class.
         /// </summary>
         /// <param name="bytes">Array for register collection.</param>
         public RegisterCollection(byte[] bytes)
@@ -30,7 +30,7 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="RegisterCollection" /> class.
+        /// Initializes a new instance of the <see cref="RegisterCollection" /> class.
         /// </summary>
         /// <param name="registers">Array for register collection.</param>
         public RegisterCollection(params ushort[] registers)
@@ -39,7 +39,7 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="RegisterCollection" /> class.
+        /// Initializes a new instance of the <see cref="RegisterCollection" /> class.
         /// </summary>
         /// <param name="registers">List for register collection.</param>
         public RegisterCollection(IList<ushort> registers)
@@ -55,7 +55,7 @@ namespace Modbus4Net.Data
 
                 foreach (ushort register in this)
                 {
-                    var b = BitConverter.GetBytes((ushort)IPAddress.HostToNetworkOrder((short)register));
+                    byte[] b = BitConverter.GetBytes((ushort)IPAddress.HostToNetworkOrder((short)register));
                     bytes.Write(b, 0, b.Length);
                 }
 
@@ -64,15 +64,15 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Gets the byte count.
+        /// Gets the byte count.
         /// </summary>
         public byte ByteCount => (byte)(Count * 2);
 
         /// <summary>
-        ///     Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        /// Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </summary>
         /// <returns>
-        ///     A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        /// A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </returns>
         public override string ToString()
         {

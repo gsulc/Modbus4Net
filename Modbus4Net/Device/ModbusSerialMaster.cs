@@ -31,7 +31,7 @@ namespace Modbus4Net.Device
         /// <returns>Return true if slave device echoed data.</returns>
         public bool ReturnQueryData(byte slaveAddress, ushort data)
         {
-            DiagnosticsRequestResponse request = new DiagnosticsRequestResponse(
+            var request = new DiagnosticsRequestResponse(
                 ModbusFunctionCodes.DiagnosticsReturnQueryData,
                 slaveAddress,
                 new RegisterCollection(data));

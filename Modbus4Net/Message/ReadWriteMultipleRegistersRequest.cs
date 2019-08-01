@@ -35,7 +35,7 @@ namespace Modbus4Net.Message
                 writeData);
 
             // TODO: ugly hack for all ModbusSerialTransport-inheritances (ModbusIpTransport would not need this, as it implements complete different BuildMessageFrame)
-            
+
             // fake ByteCount, Data can hold only even number of bytes
             ByteCount = (ProtocolDataUnit[1]);
 
@@ -82,7 +82,7 @@ namespace Modbus4Net.Message
         public void ValidateResponse(IModbusMessage response)
         {
             var typedResponse = (ReadHoldingInputRegistersResponse)response;
-            var expectedByteCount = ReadRequest.NumberOfPoints * 2;
+            int expectedByteCount = ReadRequest.NumberOfPoints * 2;
 
             if (expectedByteCount != typedResponse.ByteCount)
             {
@@ -94,9 +94,7 @@ namespace Modbus4Net.Message
         protected override void InitializeUnique(byte[] frame)
         {
             if (frame.Length < MinimumFrameSize + frame[10])
-            {
                 throw new FormatException("Message frame does not contain enough bytes.");
-            }
 
             byte[] readFrame = new byte[2 + 4];
             byte[] writeFrame = new byte[frame.Length - 6 + 2];

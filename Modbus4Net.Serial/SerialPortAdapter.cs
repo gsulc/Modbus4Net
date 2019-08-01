@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Modbus4Net.IO;
+using System;
 using System.Diagnostics;
 using System.IO.Ports;
-using Modbus4Net.IO;
 
 namespace Modbus4Net.Serial
 {
     /// <summary>
-    ///     Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
+    /// Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
     /// </summary>
     public class SerialPortAdapter : IStreamResource
     {
@@ -21,21 +21,18 @@ namespace Modbus4Net.Serial
             _serialPort.NewLine = NewLine;
         }
 
-        public int InfiniteTimeout
-        {
-            get { return SerialPort.InfiniteTimeout; }
-        }
+        public int InfiniteTimeout => SerialPort.InfiniteTimeout;
 
         public int ReadTimeout
         {
-            get { return _serialPort.ReadTimeout; }
-            set { _serialPort.ReadTimeout = value; }
+            get => _serialPort.ReadTimeout;
+            set => _serialPort.ReadTimeout = value;
         }
 
         public int WriteTimeout
         {
-            get { return _serialPort.WriteTimeout; }
-            set { _serialPort.WriteTimeout = value; }
+            get => _serialPort.WriteTimeout;
+            set => _serialPort.WriteTimeout = value;
         }
 
         public void DiscardInBuffer()

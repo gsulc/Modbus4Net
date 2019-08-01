@@ -1,5 +1,5 @@
-﻿using System;
-using Modbus4Net.Message;
+﻿using Modbus4Net.Message;
+using System;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Message
@@ -9,7 +9,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateWriteMultipleCoilsResponse()
         {
-            WriteMultipleCoilsResponse response = new WriteMultipleCoilsResponse(17, 19, 45);
+            var response = new WriteMultipleCoilsResponse(17, 19, 45);
             Assert.Equal(ModbusFunctionCodes.WriteMultipleCoils, response.FunctionCode);
             Assert.Equal(17, response.SlaveAddress);
             Assert.Equal(19, response.StartAddress);
@@ -25,7 +25,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateWriteMultipleCoilsResponseMaxSize()
         {
-            WriteMultipleCoilsResponse response = new WriteMultipleCoilsResponse(1, 2,
+            var response = new WriteMultipleCoilsResponse(1, 2,
                 Modbus.MaximumDiscreteRequestResponseSize);
             Assert.Equal(Modbus.MaximumDiscreteRequestResponseSize, response.NumberOfPoints);
         }

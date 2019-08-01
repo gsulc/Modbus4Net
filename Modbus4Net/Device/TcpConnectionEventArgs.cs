@@ -7,14 +7,10 @@ namespace Modbus4Net.Device
         public TcpConnectionEventArgs(string endPoint)
         {
             if (endPoint == null)
-            {
                 throw new ArgumentNullException(nameof(endPoint));
-            }
 
             if (endPoint == string.Empty)
-            {
                 throw new ArgumentException(Resources.EmptyEndPoint);
-            }
 
             EndPoint = endPoint;
         }

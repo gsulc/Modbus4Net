@@ -52,7 +52,7 @@ namespace Modbus4Net.Message
         {
             var typedResponse = response as ReadHoldingInputRegistersResponse;
             Debug.Assert(typedResponse != null, "Argument response should be of type ReadHoldingInputRegistersResponse.");
-            var expectedByteCount = NumberOfPoints * 2;
+            int expectedByteCount = NumberOfPoints * 2;
 
             if (expectedByteCount != typedResponse.ByteCount)
             {

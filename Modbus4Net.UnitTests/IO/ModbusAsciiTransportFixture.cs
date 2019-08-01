@@ -1,9 +1,9 @@
-﻿using System.IO;
-using System.Text;
-using Moq;
-using Modbus4Net.IO;
+﻿using Modbus4Net.IO;
 using Modbus4Net.Logging;
 using Modbus4Net.Message;
+using Moq;
+using System.IO;
+using System.Text;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.IO
@@ -17,7 +17,7 @@ namespace Modbus4Net.UnitTests.IO
         {
             byte[] expected = { 58, 48, 50, 48, 49, 48, 48, 48, 48, 48, 48, 48, 49, 70, 67, 13, 10 };
             var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 0, 1);
-            var actual = new ModbusAsciiTransport(StreamResource, new ModbusFactory(), NullModbusLogger.Instance)
+            byte[] actual = new ModbusAsciiTransport(StreamResource, new ModbusFactory(), NullModbusLogger.Instance)
                 .BuildMessageFrame(request);
 
             Assert.Equal(expected, actual);

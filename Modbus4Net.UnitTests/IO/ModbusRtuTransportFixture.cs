@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Moq;
-using Modbus4Net.Data;
+﻿using Modbus4Net.Data;
 using Modbus4Net.IO;
 using Modbus4Net.Logging;
 using Modbus4Net.Message;
 using Modbus4Net.Utility;
+using Moq;
+using System;
+using System.IO;
+using System.Linq;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.IO
@@ -141,12 +141,12 @@ namespace Modbus4Net.UnitTests.IO
         {
             var factory = new ModbusFactory();
             var mock = new Mock<ModbusRtuTransport>(StreamResource, factory, NullModbusLogger.Instance) { CallBase = true };
-            var transport = mock.Object;
+            ModbusRtuTransport transport = mock.Object;
 
             mock.Setup(t => t.Read(ModbusRtuTransport.ResponseFrameStartLength)).Returns(new byte[] { 1, 1, 1, 0 });
             mock.Setup(t => t.Read(2)).Returns(new byte[] { 81, 136 });
 
-            var response = transport.ReadResponse<ReadCoilsInputsResponse>();
+            IModbusMessage response = transport.ReadResponse<ReadCoilsInputsResponse>();
             Assert.IsType<ReadCoilsInputsResponse>(response);
 
             var expectedResponse = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, new DiscreteCollection(false));
@@ -160,7 +160,7 @@ namespace Modbus4Net.UnitTests.IO
         {
             var factory = new ModbusFactory();
             var mock = new Mock<ModbusRtuTransport>(StreamResource, factory, NullModbusLogger.Instance) { CallBase = true };
-            var transport = mock.Object;
+            ModbusRtuTransport transport = mock.Object;
 
             byte[] messageFrame = { 0x01, 0x81, 0x02 };
             byte[] crc = ModbusUtility.CalculateCrc(messageFrame);
@@ -171,7 +171,7 @@ namespace Modbus4Net.UnitTests.IO
             mock.Setup(t => t.Read(1))
                 .Returns(new byte[] { crc[1] });
 
-            var response = transport.ReadResponse<ReadCoilsInputsResponse>();
+            IModbusMessage response = transport.ReadResponse<ReadCoilsInputsResponse>();
             Assert.IsType<SlaveExceptionResponse>(response);
 
             var expectedResponse = new SlaveExceptionResponse(0x01, 0x81, 0x02);
@@ -189,7 +189,7 @@ namespace Modbus4Net.UnitTests.IO
         {
             var factory = new ModbusFactory();
             var mock = new Mock<ModbusRtuTransport>(StreamResource, factory, NullModbusLogger.Instance) { CallBase = true };
-            var transport = mock.Object;
+            ModbusRtuTransport transport = mock.Object;
 
             byte[] messageFrame = { 0x01, 0x81, 0x02 };
 
@@ -212,7 +212,7 @@ namespace Modbus4Net.UnitTests.IO
         {
             var factory = new ModbusFactory();
             var mock = new Mock<ModbusRtuTransport>(StreamResource, factory, NullModbusLogger.Instance) { CallBase = true };
-            var transport = mock.Object;
+            ModbusRtuTransport transport = mock.Object;
 
             mock.Setup(t => t.Read(ModbusRtuTransport.RequestFrameStartLength))
                 .Returns(new byte[] { 1, 1, 1, 0, 1, 0, 0 });
@@ -246,7 +246,7 @@ namespace Modbus4Net.UnitTests.IO
 
             var factory = new ModbusFactory();
 
-            ModbusRtuTransport transport = new ModbusRtuTransport(mock.Object, factory, NullModbusLogger.Instance);
+            var transport = new ModbusRtuTransport(mock.Object, factory, NullModbusLogger.Instance);
             Assert.Equal(new byte[] { 2, 2, 2, 3, 3 }, transport.Read(5));
 
             mock.VerifyAll();

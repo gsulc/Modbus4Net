@@ -47,7 +47,7 @@ namespace Modbus4Net.Message
         {
             get
             {
-                var pdu = ProtocolDataUnit;
+                byte[] pdu = ProtocolDataUnit;
                 var frame = new MemoryStream(1 + pdu.Length);
 
                 frame.WriteByte(SlaveAddress);
@@ -61,39 +61,27 @@ namespace Modbus4Net.Message
         {
             get
             {
-                List<byte> pdu = new List<byte>();
+                var pdu = new List<byte>();
 
                 pdu.Add(FunctionCode);
 
                 if (ExceptionCode.HasValue)
-                {
                     pdu.Add(ExceptionCode.Value);
-                }
 
                 if (SubFunctionCode.HasValue)
-                {
                     pdu.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)SubFunctionCode.Value)));
-                }
 
                 if (StartAddress.HasValue)
-                {
                     pdu.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)StartAddress.Value)));
-                }
 
                 if (NumberOfPoints.HasValue)
-                {
                     pdu.AddRange(BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)NumberOfPoints.Value)));
-                }
 
                 if (ByteCount.HasValue)
-                {
                     pdu.Add(ByteCount.Value);
-                }
 
                 if (Data != null)
-                {
                     pdu.AddRange(Data.NetworkBytes);
-                }
 
                 return pdu.ToArray();
             }
@@ -102,9 +90,7 @@ namespace Modbus4Net.Message
         public void Initialize(byte[] frame)
         {
             if (frame == null)
-            {
                 throw new ArgumentNullException(nameof(frame), "Argument frame cannot be null.");
-            }
 
             if (frame.Length < MinimumFrameSize)
             {

@@ -1,7 +1,7 @@
-﻿namespace Modbus4Net.Logging
-{
-    using System;
+﻿using System;
 
+namespace Modbus4Net.Logging
+{
     public class ConsoleModbusLogger : ModbusLogger
     {
         private const int LevelColumnSize = 15;

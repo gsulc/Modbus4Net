@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Modbus4Net.Device
 {
     /// <summary>
-    ///     Modbus master device.
+    /// Modbus master device.
     /// </summary>
     internal abstract class ModbusMaster : ModbusDevice, IModbusMaster
     {
@@ -18,7 +18,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Reads from 1 to 2000 contiguous coils status.
+        /// Reads from 1 to 2000 contiguous coils status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -38,7 +38,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously reads from 1 to 2000 contiguous coils status.
+        /// Asynchronously reads from 1 to 2000 contiguous coils status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -58,7 +58,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Reads from 1 to 2000 contiguous discrete input status.
+        /// Reads from 1 to 2000 contiguous discrete input status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -78,7 +78,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously reads from 1 to 2000 contiguous discrete input status.
+        /// Asynchronously reads from 1 to 2000 contiguous discrete input status.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -98,7 +98,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Reads contiguous block of holding registers.
+        /// Reads contiguous block of holding registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -118,7 +118,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously reads contiguous block of holding registers.
+        /// Asynchronously reads contiguous block of holding registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -138,7 +138,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Reads contiguous block of input registers.
+        /// Reads contiguous block of input registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -158,7 +158,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously reads contiguous block of input registers.
+        /// Asynchronously reads contiguous block of input registers.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startAddress">Address to begin reading.</param>
@@ -178,7 +178,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Writes a single coil value.
+        /// Writes a single coil value.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="coilAddress">Address to write value to.</param>
@@ -190,7 +190,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously writes a single coil value.
+        /// Asynchronously writes a single coil value.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="coilAddress">Address to write value to.</param>
@@ -203,7 +203,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Writes a single holding register.
+        /// Writes a single holding register.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="registerAddress">Address to write.</param>
@@ -219,7 +219,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously writes a single holding register.
+        /// Asynchronously writes a single holding register.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="registerAddress">Address to write.</param>
@@ -236,7 +236,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///     Write a block of 1 to 123 contiguous 16 bit holding registers.
+        /// Write a block of 1 to 123 contiguous 16 bit holding registers.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -254,7 +254,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously writes a block of 1 to 123 contiguous registers.
+        /// Asynchronously writes a block of 1 to 123 contiguous registers.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -273,7 +273,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Writes a sequence of coils.
+        /// Writes a sequence of coils.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -291,7 +291,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously writes a sequence of coils.
+        /// Asynchronously writes a sequence of coils.
         /// </summary>
         /// <param name="slaveAddress">Address of the device to write to.</param>
         /// <param name="startAddress">Address to begin writing values.</param>
@@ -310,8 +310,8 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Performs a combination of one read operation and one write operation in a single Modbus transaction.
-        ///    The write operation is performed before the read.
+        /// Performs a combination of one read operation and one write operation in a single Modbus transaction.
+        /// The write operation is performed before the read.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startReadAddress">Address to begin reading (Holding registers are addressed starting at 0).</param>
@@ -339,8 +339,8 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Asynchronously performs a combination of one read operation and one write operation in a single Modbus transaction.
-        ///    The write operation is performed before the read.
+        /// Asynchronously performs a combination of one read operation and one write operation in a single Modbus transaction.
+        /// The write operation is performed before the read.
         /// </summary>
         /// <param name="slaveAddress">Address of device to read values from.</param>
         /// <param name="startReadAddress">Address to begin reading (Holding registers are addressed starting at 0).</param>
@@ -369,7 +369,7 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///    Executes the custom message.
+        /// Executes the custom message.
         /// </summary>
         /// <typeparam name="TResponse">The type of the response.</typeparam>
         /// <param name="request">The request.</param>
@@ -384,24 +384,16 @@ namespace Modbus4Net.Device
         private static void ValidateData<T>(string argumentName, T[] data, int maxDataLength)
         {
             if (data == null)
-            {
                 throw new ArgumentNullException(nameof(data));
-            }
 
             if (data.Length == 0 || data.Length > maxDataLength)
-            {
-                string msg = $"The length of argument {argumentName} must be between 1 and {maxDataLength} inclusive.";
-                throw new ArgumentException(msg);
-            }
+                throw new ArgumentException($"The length of argument {argumentName} must be between 1 and {maxDataLength} inclusive.");
         }
 
         private static void ValidateNumberOfPoints(string argumentName, ushort numberOfPoints, ushort maxNumberOfPoints)
         {
             if (numberOfPoints < 1 || numberOfPoints > maxNumberOfPoints)
-            {
-                string msg = $"Argument {argumentName} must be between 1 and {maxNumberOfPoints} inclusive.";
-                throw new ArgumentException(msg);
-            }
+                throw new ArgumentException($"Argument {argumentName} must be between 1 and {maxNumberOfPoints} inclusive.");
         }
 
         private bool[] PerformReadDiscretes(ReadCoilsInputsRequest request)

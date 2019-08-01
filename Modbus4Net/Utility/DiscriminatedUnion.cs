@@ -4,25 +4,25 @@ using System.Diagnostics.CodeAnalysis;
 namespace Modbus4Net.Utility
 {
     /// <summary>
-    ///     Possible options for DiscriminatedUnion type.
+    /// Possible options for DiscriminatedUnion type.
     /// </summary>
     public enum DiscriminatedUnionOption
     {
         /// <summary>
-        ///     Option A.
+        /// Option A.
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "A")]
         A,
 
         /// <summary>
-        ///     Option B.
+        /// Option B.
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "B")]
         B
     }
 
     /// <summary>
-    ///     A data type that can store one of two possible strongly typed options.
+    /// A data type that can store one of two possible strongly typed options.
     /// </summary>
     /// <typeparam name="TA">The type of option A.</typeparam>
     /// <typeparam name="TB">The type of option B.</typeparam>
@@ -33,7 +33,7 @@ namespace Modbus4Net.Utility
         private DiscriminatedUnionOption option;
 
         /// <summary>
-        ///     Gets the value of option A.
+        /// Gets the value of option A.
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "A")]
         public TA A
@@ -51,7 +51,7 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Gets the value of option B.
+        /// Gets the value of option B.
         /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "B")]
         public TB B
@@ -69,12 +69,12 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Gets the discriminated value option set for this instance.
+        /// Gets the discriminated value option set for this instance.
         /// </summary>
         public DiscriminatedUnionOption Option => this.option;
 
         /// <summary>
-        ///     Factory method for creating DiscriminatedUnion with option A set.
+        /// Factory method for creating DiscriminatedUnion with option A set.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Factory method.")]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "0#a")]
@@ -84,7 +84,7 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Factory method for creating DiscriminatedUnion with option B set.
+        /// Factory method for creating DiscriminatedUnion with option B set.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes", Justification = "Factory method.")]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "0#b")]
@@ -94,10 +94,10 @@ namespace Modbus4Net.Utility
         }
 
         /// <summary>
-        ///     Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        /// Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </summary>
         /// <returns>
-        ///     A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        /// A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </returns>
         public override string ToString()
         {

@@ -27,10 +27,10 @@ namespace Modbus4Net.Message
         }
 
         /// <summary>
-        ///     Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        /// Returns a <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
         /// </summary>
         /// <returns>
-        ///     A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
+        /// A <see cref="T:System.String"></see> that represents the current <see cref="T:System.Object"></see>.
         /// </returns>
         public override string ToString()
         {
@@ -66,9 +66,7 @@ namespace Modbus4Net.Message
         protected override void InitializeUnique(byte[] frame)
         {
             if (FunctionCode <= Modbus.ExceptionOffset)
-            {
                 throw new FormatException(Resources.SlaveExceptionResponseInvalidFunctionCode);
-            }
 
             SlaveExceptionCode = frame[2];
         }

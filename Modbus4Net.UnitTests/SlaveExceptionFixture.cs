@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Modbus4Net.Message;
+using System;
 using System.IO;
-using Modbus4Net.Message;
 using Xunit;
 #if NET46
 using System.Runtime.Serialization.Formatters.Binary;

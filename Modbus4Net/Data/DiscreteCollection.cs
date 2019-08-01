@@ -7,18 +7,18 @@ using System.Linq;
 namespace Modbus4Net.Data
 {
     /// <summary>
-    ///     Collection of discrete values.
+    /// Collection of discrete values.
     /// </summary>
     internal class DiscreteCollection : Collection<bool>, IModbusMessageDataCollection
     {
         /// <summary>
-        ///     Number of bits per byte.
+        /// Number of bits per byte.
         /// </summary>
         private const int BitsPerByte = 8;
         private readonly List<bool> _discretes;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DiscreteCollection" /> class.
+        /// Initializes a new instance of the <see cref="DiscreteCollection" /> class.
         /// </summary>
         public DiscreteCollection()
             : this(new List<bool>())
@@ -26,7 +26,7 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DiscreteCollection" /> class.
+        /// Initializes a new instance of the <see cref="DiscreteCollection" /> class.
         /// </summary>
         /// <param name="bits">Array for discrete collection.</param>
         public DiscreteCollection(params bool[] bits)
@@ -35,16 +35,14 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DiscreteCollection" /> class.
+        /// Initializes a new instance of the <see cref="DiscreteCollection" /> class.
         /// </summary>
         /// <param name="bytes">Array for discrete collection.</param>
         public DiscreteCollection(params byte[] bytes)
             : this()
         {
             if (bytes == null)
-            {
                 throw new ArgumentNullException(nameof(bytes));
-            }
 
             _discretes.Capacity = bytes.Length * BitsPerByte;
 
@@ -62,7 +60,7 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DiscreteCollection" /> class.
+        /// Initializes a new instance of the <see cref="DiscreteCollection" /> class.
         /// </summary>
         /// <param name="bits">List for discrete collection.</param>
         public DiscreteCollection(IList<bool> bits)
@@ -71,7 +69,7 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="DiscreteCollection" /> class.
+        /// Initializes a new instance of the <see cref="DiscreteCollection" /> class.
         /// </summary>
         /// <param name="bits">List for discrete collection.</param>
         internal DiscreteCollection(List<bool> bits)
@@ -82,7 +80,7 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Gets the network bytes.
+        /// Gets the network bytes.
         /// </summary>
         public byte[] NetworkBytes
         {
@@ -93,9 +91,7 @@ namespace Modbus4Net.Data
                 for (int index = 0; index < _discretes.Count; index++)
                 {
                     if (_discretes[index])
-                    {
                         bytes[index / BitsPerByte] |= (byte)(1 << (index % BitsPerByte));
-                    }
                 }
 
                 return bytes;
@@ -103,15 +99,15 @@ namespace Modbus4Net.Data
         }
 
         /// <summary>
-        ///     Gets the byte count.
+        /// Gets the byte count.
         /// </summary>
         public byte ByteCount => (byte)((Count + 7) / 8);
 
         /// <summary>
-        ///     Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        /// Returns a <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </summary>
         /// <returns>
-        ///     A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
+        /// A <see cref="T:System.String" /> that represents the current <see cref="T:System.Object" />.
         /// </returns>
         public override string ToString()
         {

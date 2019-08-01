@@ -17,7 +17,6 @@ namespace Modbus4Net
         public static IModbusSerialMaster CreateRtuMaster(this IModbusFactory factory, IStreamResource streamResource)
         {
             IModbusRtuTransport transport = factory.CreateRtuTransport(streamResource);
-
             return new ModbusSerialMaster(transport);
         }
 
@@ -30,7 +29,6 @@ namespace Modbus4Net
         public static IModbusSerialMaster CreateAsciiMaster(this IModbusFactory factory, IStreamResource streamResource)
         {
             IModbusAsciiTransport transport = factory.CreateAsciiTransport(streamResource);
-
             return new ModbusSerialMaster(transport);
         }
 
@@ -44,7 +42,6 @@ namespace Modbus4Net
             IStreamResource streamResource)
         {
             IModbusRtuTransport transport = factory.CreateRtuTransport(streamResource);
-
             return factory.CreateSlaveNetwork(transport);
         }
 
@@ -58,9 +55,7 @@ namespace Modbus4Net
             IStreamResource streamResource)
         {
             IModbusAsciiTransport transport = factory.CreateAsciiTransport(streamResource);
-
             return factory.CreateSlaveNetwork(transport);
         }
-
     }
 }

@@ -15,9 +15,7 @@ namespace Modbus4Net.Message
             : base(slaveAddress, functionCode)
         {
             if (data == null)
-            {
                 throw new ArgumentNullException(nameof(data));
-            }
 
             ByteCount = data.ByteCount;
             Data = data;
@@ -40,9 +38,7 @@ namespace Modbus4Net.Message
         protected override void InitializeUnique(byte[] frame)
         {
             if (frame.Length < MinimumFrameSize + frame[2])
-            {
                 throw new FormatException("Message frame does not contain enough bytes.");
-            }
 
             ByteCount = frame[2];
             Data = new RegisterCollection(frame.Slice(3, ByteCount).ToArray());

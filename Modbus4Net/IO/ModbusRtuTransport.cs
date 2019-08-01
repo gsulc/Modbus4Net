@@ -38,9 +38,7 @@ namespace Modbus4Net.IO
             byte functionCode = frameStart[1];
 
             if (functionCode > Modbus.ExceptionOffset)
-            {
                 return 1;
-            }
 
             IModbusFunctionService service = ModbusFactory.GetFunctionServiceOrThrow(functionCode);
 
@@ -53,17 +51,15 @@ namespace Modbus4Net.IO
             int numBytesRead = 0;
 
             while (numBytesRead != count)
-            {
                 numBytesRead += StreamResource.Read(frameBytes, numBytesRead, count - numBytesRead);
-            }
 
             return frameBytes;
         }
 
         public override byte[] BuildMessageFrame(IModbusMessage message)
         {
-            var messageFrame = message.MessageFrame;
-            var crc = ModbusUtility.CalculateCrc(messageFrame);
+            byte[] messageFrame = message.MessageFrame;
+            byte[] crc = ModbusUtility.CalculateCrc(messageFrame);
             var messageBody = new MemoryStream(messageFrame.Length + crc.Length);
 
             messageBody.Write(messageFrame, 0, messageFrame.Length);
@@ -83,9 +79,7 @@ namespace Modbus4Net.IO
         public override IModbusMessage ReadResponse<T>()
         {
             byte[] frame = ReadResponse();
-
             Logger.LogFrameRx(frame);
-
             return CreateResponse<T>(frame);
         }
 

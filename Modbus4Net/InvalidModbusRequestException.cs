@@ -6,7 +6,7 @@ namespace Modbus4Net
     using System.Runtime.Serialization;
 #endif
     /// <summary>
-    ///     An exception that provides the exception code that will be sent in response to an invalid Modbus request.
+    /// An exception that provides the exception code that will be sent in response to an invalid Modbus request.
     /// </summary>
 #if NET46
     [Serializable]
@@ -16,7 +16,7 @@ namespace Modbus4Net
         private readonly byte _exceptionCode;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code.
+        /// Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code.
         /// </summary>
         /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
         public InvalidModbusRequestException(byte exceptionCode)
@@ -25,7 +25,7 @@ namespace Modbus4Net
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified error message and Modbus exception code.
+        /// Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified error message and Modbus exception code.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
@@ -35,7 +35,7 @@ namespace Modbus4Net
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code and a reference to the inner exception that is the cause of this exception.
+        /// Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
         /// <param name="innerException">The exception that is the cause of the current exception. If the <paramref name="innerException" /> parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
@@ -45,7 +45,7 @@ namespace Modbus4Net
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code and a reference to the inner exception that is the cause of this exception.
+        /// Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with a specified Modbus exception code and a reference to the inner exception that is the cause of this exception.
         /// </summary>
         /// <param name="message">The error message that explains the reason for the exception.</param>
         /// <param name="exceptionCode">The Modbus exception code to provide to the slave.</param>
@@ -58,7 +58,7 @@ namespace Modbus4Net
 
 #if NET46
         /// <summary>
-        ///     Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with serialized data.
+        /// Initializes a new instance of the <see cref="InvalidModbusRequestException" /> class with serialized data.
         /// </summary>
         /// <param name="info">The object that holds the serialized object data.</param>
         /// <param name="context">The contextual information about the source or destination.</param>
@@ -70,7 +70,7 @@ namespace Modbus4Net
 #endif
 
         /// <summary>
-        ///     Gets the Modbus exception code to provide to the slave.
+        /// Gets the Modbus exception code to provide to the slave.
         /// </summary>
         public byte ExceptionCode => _exceptionCode;
 

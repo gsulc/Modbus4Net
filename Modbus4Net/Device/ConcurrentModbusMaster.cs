@@ -57,7 +57,7 @@
 
         private async Task<T> PerformFuncAsync<T>(Func<Task<T>> action, CancellationToken cancellationToken)
         {
-            T value = default(T);
+            var value = default(T);
 
             await PerformAsync(async () => value = await action(), cancellationToken);
 
@@ -86,7 +86,7 @@
         {
             return await PerformFuncAsync(async () =>
             {
-                List<ushort> registers = new List<ushort>(numberOfPoints);
+                var registers = new List<ushort>(numberOfPoints);
 
                 int soFar = 0;
                 int thisRead = blockSize;
@@ -126,7 +126,7 @@
         {
             return PerformFuncAsync(async () =>
             {
-                List<ushort> registers = new List<ushort>(numberOfPoints);
+                var registers = new List<ushort>(numberOfPoints);
 
                 int soFar = 0;
                 int thisRead = blockSize;

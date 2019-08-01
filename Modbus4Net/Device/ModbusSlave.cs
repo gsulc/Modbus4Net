@@ -38,9 +38,7 @@ namespace Modbus4Net.Device
 
                 //Check to see if we found a handler for this function code.
                 if (handler == null)
-                {
                     throw new InvalidModbusRequestException(SlaveExceptionCodes.IllegalFunction);
-                }
 
                 //Process the request
                 response = handler.HandleSlaveRequest(request, DataStore);
@@ -73,7 +71,6 @@ namespace Modbus4Net.Device
                     SlaveExceptionCodes.SlaveDeviceFailure);
             }
 #endif
-
 
             return response;
         }

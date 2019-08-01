@@ -34,9 +34,5 @@ namespace Modbus4Net.IO
         {
             throw new NotImplementedException();
         }
-
-
-
-
     }
 }

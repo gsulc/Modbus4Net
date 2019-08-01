@@ -20,7 +20,7 @@ namespace Modbus4Net.IO
         private IStreamResource _streamResource;
 
         /// <summary>
-        ///     This constructor is called by the NullTransport.
+        /// This constructor is called by the NullTransport.
         /// </summary>
         public ModbusTransport(IModbusFactory modbusFactory, IModbusLogger logger)
         {
@@ -35,8 +35,8 @@ namespace Modbus4Net.IO
         }
 
         /// <summary>
-        ///     Number of times to retry sending message after encountering a failure such as an IOException,
-        ///     TimeoutException, or a corrupt message.
+        /// Number of times to retry sending message after encountering a failure such as an IOException,
+        /// TimeoutException, or a corrupt message.
         /// </summary>
         public int Retries
         {
@@ -57,8 +57,8 @@ namespace Modbus4Net.IO
         public bool SlaveBusyUsesRetryCount { get; set; }
 
         /// <summary>
-        ///     Gets or sets the number of milliseconds the tranport will wait before retrying a message after receiving
-        ///     an ACKNOWLEGE or SLAVE DEVICE BUSY slave exception response.
+        /// Gets or sets the number of milliseconds the tranport will wait before retrying a message after receiving
+        /// an ACKNOWLEGE or SLAVE DEVICE BUSY slave exception response.
         /// </summary>
         public int WaitToRetryMilliseconds
         {
@@ -67,16 +67,14 @@ namespace Modbus4Net.IO
             set
             {
                 if (value < 0)
-                {
                     throw new ArgumentException(Resources.WaitRetryGreaterThanZero);
-                }
 
                 _waitToRetryMilliseconds = value;
             }
         }
 
         /// <summary>
-        ///     Gets or sets the number of milliseconds before a timeout occurs when a read operation does not finish.
+        /// Gets or sets the number of milliseconds before a timeout occurs when a read operation does not finish.
         /// </summary>
         public int ReadTimeout
         {
@@ -85,7 +83,7 @@ namespace Modbus4Net.IO
         }
 
         /// <summary>
-        ///     Gets or sets the number of milliseconds before a timeout occurs when a write operation does not finish.
+        /// Gets or sets the number of milliseconds before a timeout occurs when a write operation does not finish.
         /// </summary>
         public int WriteTimeout
         {
@@ -94,7 +92,7 @@ namespace Modbus4Net.IO
         }
 
         /// <summary>
-        ///     Gets the stream resource.
+        /// Gets the stream resource.
         /// </summary>
         public IStreamResource StreamResource => _streamResource;
 
@@ -106,7 +104,7 @@ namespace Modbus4Net.IO
         protected IModbusLogger Logger { get; }
 
         /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
@@ -165,14 +163,11 @@ namespace Modbus4Net.IO
                 catch (SlaveException se)
                 {
                     if (se.SlaveExceptionCode != SlaveExceptionCodes.SlaveDeviceBusy)
-                    {
                         throw;
-                    }
 
                     if (SlaveBusyUsesRetryCount && attempt++ > _retries)
-                    {
+
                         throw;
-                    }
 
                     Logger.Warning($"Received SLAVE_DEVICE_BUSY exception response, waiting {_waitToRetryMilliseconds} milliseconds and resubmitting request.");
                     Sleep(WaitToRetryMilliseconds);
@@ -191,17 +186,14 @@ namespace Modbus4Net.IO
                         Logger.Error($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
 
                         if (attempt++ > _retries)
-                        {
                             throw;
-                        }
                     }
                     else
                     {
                         throw;
                     }
                 }
-            }
-            while (!success);
+            } while (!success);
 
             return (T)response;
         }
@@ -214,13 +206,9 @@ namespace Modbus4Net.IO
 
             // check for slave exception response else create message from frame
             if (functionCode > Modbus.ExceptionOffset)
-            {
                 response = ModbusMessageFactory.CreateModbusMessage<SlaveExceptionResponse>(frame);
-            }
             else
-            {
                 response = ModbusMessageFactory.CreateModbusMessage<T>(frame);
-            }
 
             return response;
         }
@@ -244,34 +232,28 @@ namespace Modbus4Net.IO
             var req = request as IModbusRequest;
 
             if (req != null)
-            {
                 req.ValidateResponse(response);
-            }
 
             OnValidateResponse(request, response);
         }
 
         /// <summary>
-        ///     Check whether we need to attempt to read another response before processing it (e.g. response was from previous request)
+        /// Check whether we need to attempt to read another response before processing it (e.g. response was from previous request)
         /// </summary>
         public bool ShouldRetryResponse(IModbusMessage request, IModbusMessage response)
         {
             // These checks are enforced in ValidateRequest, we don't want to retry for these
             if (request.FunctionCode != response.FunctionCode)
-            {
                 return false;
-            }
 
             if (request.SlaveAddress != response.SlaveAddress)
-            {
                 return false;
-            }
 
             return OnShouldRetryResponse(request, response);
         }
 
         /// <summary>
-        ///     Provide hook to check whether receiving a response should be retried
+        /// Provide hook to check whether receiving a response should be retried
         /// </summary>
         public virtual bool OnShouldRetryResponse(IModbusMessage request, IModbusMessage response)
         {
@@ -279,7 +261,7 @@ namespace Modbus4Net.IO
         }
 
         /// <summary>
-        ///     Provide hook to do transport level message validation.
+        /// Provide hook to do transport level message validation.
         /// </summary>
         public abstract void OnValidateResponse(IModbusMessage request, IModbusMessage response);
 
@@ -293,11 +275,11 @@ namespace Modbus4Net.IO
         public abstract void Write(IModbusMessage message);
 
         /// <summary>
-        ///     Releases unmanaged and - optionally - managed resources
+        /// Releases unmanaged and - optionally - managed resources
         /// </summary>
         /// <param name="disposing">
-        ///     <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
-        ///     unmanaged resources.
+        /// <c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only
+        /// unmanaged resources.
         /// </param>
         protected virtual void Dispose(bool disposing)
         {

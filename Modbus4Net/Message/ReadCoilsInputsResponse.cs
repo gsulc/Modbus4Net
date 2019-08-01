@@ -35,9 +35,7 @@ namespace Modbus4Net.Message
         protected override void InitializeUnique(byte[] frame)
         {
             if (frame.Length < 3 + frame[2])
-            {
                 throw new FormatException("Message frame data segment does not contain enough bytes.");
-            }
 
             ByteCount = frame[2];
             Data = new DiscreteCollection(frame.Slice(3, ByteCount).ToArray());

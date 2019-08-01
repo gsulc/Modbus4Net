@@ -1,5 +1,5 @@
-﻿using System;
-using Modbus4Net.Utility;
+﻿using Modbus4Net.Utility;
+using System;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Utility

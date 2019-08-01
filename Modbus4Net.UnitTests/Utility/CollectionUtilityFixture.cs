@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Modbus4Net.Data;
+using Modbus4Net.UnitTests.Message;
+using Modbus4Net.Unme.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Modbus4Net.Data;
-using Modbus4Net.UnitTests.Message;
-using Modbus4Net.Unme.Common;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Utility
@@ -35,14 +35,14 @@ namespace Modbus4Net.UnitTests.Utility
         [Fact]
         public void SliceCollection()
         {
-            Collection<bool> col = new Collection<bool>(new bool[] { true, false, false, false, true, true });
+            var col = new Collection<bool>(new bool[] { true, false, false, false, true, true });
             Assert.Equal(new bool[] { false, false, true }, col.Slice(2, 3).ToArray());
         }
 
         [Fact]
         public void SliceReadOnlyCollection()
         {
-            ReadOnlyCollection<bool> col =
+            var col =
                 new ReadOnlyCollection<bool>(new bool[] { true, false, false, false, true, true });
             Assert.Equal(new bool[] { false, false, true }, col.Slice(2, 3).ToArray());
         }

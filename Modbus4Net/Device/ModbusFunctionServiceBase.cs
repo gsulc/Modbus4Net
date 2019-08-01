@@ -23,7 +23,7 @@ namespace Modbus4Net.Device
         public IModbusMessage HandleSlaveRequest(IModbusMessage request, ISlaveDataStore dataStore)
         {
             //Attempt to cast the message
-            TRequest typedRequest = request as TRequest;
+            var typedRequest = request as TRequest;
 
             if (typedRequest == null)
                 throw new InvalidOperationException($"Unable to cast request of type '{request.GetType().Name}' to type '{typeof(TRequest).Name}");
@@ -41,10 +41,9 @@ namespace Modbus4Net.Device
         protected static T CreateModbusMessage<T>(byte[] frame)
             where T : IModbusMessage, new()
         {
-            IModbusMessage message = new T();
+            var message = new T();
             message.Initialize(frame);
-
-            return (T)message;
+            return message;
         }
     }
 }

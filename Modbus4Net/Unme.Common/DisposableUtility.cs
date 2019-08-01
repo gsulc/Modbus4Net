@@ -8,9 +8,7 @@ namespace Modbus4Net.Unme.Common
             where T : class, IDisposable
         {
             if (item == null)
-            {
                 return;
-            }
 
             item.Dispose();
             item = default(T);

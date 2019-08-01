@@ -1,6 +1,6 @@
-﻿using System;
-using Modbus4Net.Data;
+﻿using Modbus4Net.Data;
 using Modbus4Net.Message;
+using System;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Message
@@ -10,8 +10,8 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateWriteMultipleRegistersRequestFixture()
         {
-            RegisterCollection col = new RegisterCollection(10, 20, 30, 40, 50);
-            WriteMultipleRegistersRequest request = new WriteMultipleRegistersRequest(11, 34, col);
+            var col = new RegisterCollection(10, 20, 30, 40, 50);
+            var request = new WriteMultipleRegistersRequest(11, 34, col);
             Assert.Equal(ModbusFunctionCodes.WriteMultipleRegisters, request.FunctionCode);
             Assert.Equal(11, request.SlaveAddress);
             Assert.Equal(34, request.StartAddress);
@@ -30,7 +30,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateWriteMultipleRegistersRequestMaxSize()
         {
-            WriteMultipleRegistersRequest request = new WriteMultipleRegistersRequest(1, 2,
+            var request = new WriteMultipleRegistersRequest(1, 2,
                 MessageUtility.CreateDefaultCollection<RegisterCollection, ushort>(3, Modbus.MaximumRegisterRequestResponseSize));
             Assert.Equal(Modbus.MaximumRegisterRequestResponseSize, request.NumberOfPoints);
         }
@@ -38,8 +38,8 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void ToString_WriteMultipleRegistersRequest()
         {
-            RegisterCollection col = new RegisterCollection(10, 20, 30, 40, 50);
-            WriteMultipleRegistersRequest request = new WriteMultipleRegistersRequest(11, 34, col);
+            var col = new RegisterCollection(10, 20, 30, 40, 50);
+            var request = new WriteMultipleRegistersRequest(11, 34, col);
 
             Assert.Equal("Write 5 holding registers starting at address 34.", request.ToString());
         }

@@ -6,12 +6,12 @@ using System.Linq;
 namespace Modbus4Net.Extensions.Enron
 {
     /// <summary>
-    ///     Utility extensions for the Enron Modbus dialect.
+    /// Utility extensions for the Enron Modbus dialect.
     /// </summary>
     public static class EnronModbus
     {
         /// <summary>
-        ///     Read contiguous block of 32 bit holding registers.
+        /// Read contiguous block of 32 bit holding registers.
         /// </summary>
         /// <param name="master">The Modbus master.</param>
         /// <param name="slaveAddress">Address of device to read values from.</param>
@@ -32,7 +32,7 @@ namespace Modbus4Net.Extensions.Enron
             ValidateNumberOfPoints(numberOfPoints, 62);
 
             // read 16 bit chunks and perform conversion
-            var rawRegisters = master.ReadHoldingRegisters(
+            ushort[] rawRegisters = master.ReadHoldingRegisters(
                 slaveAddress,
                 startAddress,
                 (ushort)(numberOfPoints * 2));
@@ -41,7 +41,7 @@ namespace Modbus4Net.Extensions.Enron
         }
 
         /// <summary>
-        ///     Read contiguous block of 32 bit input registers.
+        /// Read contiguous block of 32 bit input registers.
         /// </summary>
         /// <param name="master">The Modbus master.</param>
         /// <param name="slaveAddress">Address of device to read values from.</param>
@@ -61,7 +61,7 @@ namespace Modbus4Net.Extensions.Enron
 
             ValidateNumberOfPoints(numberOfPoints, 62);
 
-            var rawRegisters = master.ReadInputRegisters(
+            ushort[] rawRegisters = master.ReadInputRegisters(
                 slaveAddress,
                 startAddress,
                 (ushort)(numberOfPoints * 2));
@@ -70,7 +70,7 @@ namespace Modbus4Net.Extensions.Enron
         }
 
         /// <summary>
-        ///     Write a single 16 bit holding register.
+        /// Write a single 16 bit holding register.
         /// </summary>
         /// <param name="master">The Modbus master.</param>
         /// <param name="slaveAddress">Address of the device to write to.</param>
@@ -91,7 +91,7 @@ namespace Modbus4Net.Extensions.Enron
         }
 
         /// <summary>
-        ///     Write a block of contiguous 32 bit holding registers.
+        /// Write a block of contiguous 32 bit holding registers.
         /// </summary>
         /// <param name="master">The Modbus master.</param>
         /// <param name="slaveAddress">Address of the device to write to.</param>
@@ -122,11 +122,11 @@ namespace Modbus4Net.Extensions.Enron
         }
 
         /// <summary>
-        ///     Convert the 32 bit registers to two 16 bit values.
+        /// Convert the 32 bit registers to two 16 bit values.
         /// </summary>
         private static IEnumerable<ushort> Convert(uint[] registers)
         {
-            foreach (var register in registers)
+            foreach (uint register in registers)
             {
                 // low order value
                 yield return BitConverter.ToUInt16(BitConverter.GetBytes(register), 0);
@@ -137,7 +137,7 @@ namespace Modbus4Net.Extensions.Enron
         }
 
         /// <summary>
-        ///     Convert the 16 bit registers to 32 bit registers.
+        /// Convert the 16 bit registers to 32 bit registers.
         /// </summary>
         private static IEnumerable<uint> Convert(ushort[] registers)
         {

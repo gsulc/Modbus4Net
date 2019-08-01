@@ -17,7 +17,7 @@
 
             byte functionCode = frame[1];
 
-            var functionService = factory.GetFunctionService(functionCode);
+            IModbusFunctionService functionService = factory.GetFunctionService(functionCode);
 
             return functionService.CreateRequest(frame);
         }

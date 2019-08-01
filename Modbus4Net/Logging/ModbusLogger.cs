@@ -30,9 +30,7 @@
         public void Log(LoggingLevel level, string message)
         {
             if (ShouldLog(level))
-            {
                 LogCore(level, message);
-            }
         }
 
         /// <summary>

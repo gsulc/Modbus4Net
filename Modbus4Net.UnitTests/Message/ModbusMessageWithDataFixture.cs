@@ -27,7 +27,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void DataReadCoilsResponse()
         {
-            DiscreteCollection col = new DiscreteCollection(false, true, false, true, false, true, false, false, false,
+            var col = new DiscreteCollection(false, true, false, true, false, true, false, false, false,
                 false);
             AbstractModbusMessageWithData<DiscreteCollection> message = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 11, 1, col);
             Assert.Equal(col.Count, message.Data.Count);

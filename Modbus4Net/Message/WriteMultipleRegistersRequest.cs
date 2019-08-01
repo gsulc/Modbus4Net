@@ -78,9 +78,7 @@ namespace Modbus4Net.Message
         protected override void InitializeUnique(byte[] frame)
         {
             if (frame.Length < MinimumFrameSize + frame[6])
-            {
                 throw new FormatException("Message frame does not contain enough bytes.");
-            }
 
             StartAddress = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 2));
             NumberOfPoints = (ushort)IPAddress.NetworkToHostOrder(BitConverter.ToInt16(frame, 4));

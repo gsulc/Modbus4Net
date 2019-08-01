@@ -14,7 +14,7 @@
         public static T CreateModbusMessage<T>(byte[] frame)
             where T : IModbusMessage, new()
         {
-            T message = new T();
+            var message = new T();
             message.Initialize(frame);
             return message;
         }

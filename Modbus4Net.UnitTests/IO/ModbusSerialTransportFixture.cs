@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using Moq;
-using Modbus4Net.Data;
+﻿using Modbus4Net.Data;
 using Modbus4Net.IO;
 using Modbus4Net.Logging;
 using Modbus4Net.Message;
 using Modbus4Net.UnitTests.Message;
 using Modbus4Net.Utility;
+using Moq;
+using System;
+using System.IO;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.IO
@@ -21,7 +21,7 @@ namespace Modbus4Net.UnitTests.IO
             var transport = new ModbusAsciiTransport(StreamResource, new ModbusFactory(), NullModbusLogger.Instance);
             var expectedResponse = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 2, 1, new DiscreteCollection(true, false, false, false, false, false, false, true));
             byte lrc = ModbusUtility.CalculateLrc(expectedResponse.MessageFrame);
-            var response = transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 2, ModbusFunctionCodes.ReadCoils, 1, 129, lrc });
+            IModbusMessage response = transport.CreateResponse<ReadCoilsInputsResponse>(new byte[] { 2, ModbusFunctionCodes.ReadCoils, 1, 129, lrc });
 
             Assert.IsType<ReadCoilsInputsResponse>(response);
             ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(expectedResponse, response);
@@ -31,7 +31,7 @@ namespace Modbus4Net.UnitTests.IO
         public void CreateResponseErroneousLrc()
         {
             var transport = new ModbusAsciiTransport(StreamResource, new ModbusFactory(), NullModbusLogger.Instance) { CheckFrame = true };
-            var frame = new byte[] { 19, ModbusFunctionCodes.ReadCoils, 0, 0, 0, 2, 115 };
+            byte[] frame = new byte[] { 19, ModbusFunctionCodes.ReadCoils, 0, 0, 0, 2, 115 };
 
             Assert.Throws<IOException>(
                 () => transport.CreateResponse<ReadCoilsInputsResponse>(frame));
@@ -92,7 +92,7 @@ namespace Modbus4Net.UnitTests.IO
                 });
 
             var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 3, 4);
-            var actualResponse = transport.UnicastMessage<ReadCoilsInputsResponse>(request);
+            ReadCoilsInputsResponse actualResponse = transport.UnicastMessage<ReadCoilsInputsResponse>(request);
 
             ModbusMessageFixture.AssertModbusMessagePropertiesAreEqual(response, actualResponse);
             mock.VerifyAll();

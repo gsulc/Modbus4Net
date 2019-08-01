@@ -4,7 +4,7 @@ using System;
 namespace Modbus4Net.Device
 {
     /// <summary>
-    ///     Modbus device.
+    /// Modbus device.
     /// </summary>
     internal abstract class ModbusDevice : IDisposable
     {
@@ -16,12 +16,12 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///     Gets the Modbus Transport.
+        /// Gets the Modbus Transport.
         /// </summary>
         public IModbusTransport Transport => _transport;
 
         /// <summary>
-        ///     Releases unmanaged and - optionally - managed resources.
+        /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         public void Dispose()
         {
@@ -30,11 +30,11 @@ namespace Modbus4Net.Device
         }
 
         /// <summary>
-        ///     Releases unmanaged and - optionally - managed resources.
+        /// Releases unmanaged and - optionally - managed resources.
         /// </summary>
         /// <param name="disposing">
-        ///     <c>true</c> to release both managed and unmanaged resources;
-        ///     <c>false</c> to release only unmanaged resources.
+        /// <c>true</c> to release both managed and unmanaged resources;
+        /// <c>false</c> to release only unmanaged resources.
         /// </param>
         protected virtual void Dispose(bool disposing)
         {

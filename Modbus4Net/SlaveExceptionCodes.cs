@@ -1,7 +1,7 @@
 ﻿namespace Modbus4Net
 {
     /// <summary>
-    ///  Modbus slave exception codes
+    /// Modbus slave exception codes
     /// </summary>
     public static class SlaveExceptionCodes
     {

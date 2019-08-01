@@ -1,6 +1,6 @@
-﻿using System;
-using Modbus4Net.Data;
+﻿using Modbus4Net.Data;
 using Modbus4Net.Message;
+using System;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.Message
@@ -10,8 +10,8 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateWriteMultipleCoilsRequest()
         {
-            DiscreteCollection col = new DiscreteCollection(true, false, true, false, true, true, true, false, false);
-            WriteMultipleCoilsRequest request = new WriteMultipleCoilsRequest(34, 45, col);
+            var col = new DiscreteCollection(true, false, true, false, true, true, true, false, false);
+            var request = new WriteMultipleCoilsRequest(34, 45, col);
             Assert.Equal(ModbusFunctionCodes.WriteMultipleCoils, request.FunctionCode);
             Assert.Equal(34, request.SlaveAddress);
             Assert.Equal(45, request.StartAddress);
@@ -30,7 +30,7 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void CreateWriteMultipleCoilsRequestMaxSize()
         {
-            WriteMultipleCoilsRequest request = new WriteMultipleCoilsRequest(1, 2,
+            var request = new WriteMultipleCoilsRequest(1, 2,
                 MessageUtility.CreateDefaultCollection<DiscreteCollection, bool>(true, Modbus.MaximumDiscreteRequestResponseSize));
             Assert.Equal(Modbus.MaximumDiscreteRequestResponseSize, request.Data.Count);
         }
@@ -38,8 +38,8 @@ namespace Modbus4Net.UnitTests.Message
         [Fact]
         public void ToString_WriteMultipleCoilsRequest()
         {
-            DiscreteCollection col = new DiscreteCollection(true, false, true, false, true, true, true, false, false);
-            WriteMultipleCoilsRequest request = new WriteMultipleCoilsRequest(34, 45, col);
+            var col = new DiscreteCollection(true, false, true, false, true, true, true, false, false);
+            var request = new WriteMultipleCoilsRequest(34, 45, col);
 
             Assert.Equal("Write 9 coils starting at address 45.", request.ToString());
         }

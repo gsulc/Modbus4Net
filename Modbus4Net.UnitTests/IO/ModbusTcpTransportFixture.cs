@@ -1,13 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Castle.Core.Logging;
-using Moq;
-using Modbus4Net.Data;
+﻿using Modbus4Net.Data;
 using Modbus4Net.IO;
 using Modbus4Net.Logging;
 using Modbus4Net.Message;
 using Modbus4Net.UnitTests.Message;
+using Moq;
+using System;
+using System.IO;
+using System.Linq;
 using Xunit;
 
 namespace Modbus4Net.UnitTests.IO
@@ -19,7 +18,7 @@ namespace Modbus4Net.UnitTests.IO
         [Fact]
         public void BuildMessageFrame()
         {
-            var mock = new Mock<ModbusIpTransport>(StreamResourceMock, new ModbusFactory(),  NullModbusLogger.Instance) { CallBase = true };
+            var mock = new Mock<ModbusIpTransport>(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance) { CallBase = true };
             var message = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 2, 10, 5);
 
             byte[] result = mock.Object.BuildMessageFrame(message);
@@ -107,7 +106,7 @@ namespace Modbus4Net.UnitTests.IO
         [Fact]
         public void GetNewTransactionId()
         {
-            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(),  NullModbusLogger.Instance);
+            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance);
 
             Assert.Equal(1, transport.GetNewTransactionId());
             Assert.Equal(2, transport.GetNewTransactionId());
@@ -116,7 +115,7 @@ namespace Modbus4Net.UnitTests.IO
         [Fact]
         public void OnShouldRetryResponse_ReturnsTrue_IfWithinThreshold()
         {
-            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(),  NullModbusLogger.Instance);
+            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance);
             var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
             var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
 
@@ -130,7 +129,7 @@ namespace Modbus4Net.UnitTests.IO
         [Fact]
         public void OnShouldRetryResponse_ReturnsFalse_IfThresholdDisabled()
         {
-            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(),  NullModbusLogger.Instance);
+            var transport = new ModbusIpTransport(StreamResourceMock, new ModbusFactory(), NullModbusLogger.Instance);
             var request = new ReadCoilsInputsRequest(ModbusFunctionCodes.ReadCoils, 1, 1, 1);
             var response = new ReadCoilsInputsResponse(ModbusFunctionCodes.ReadCoils, 1, 1, null);
 

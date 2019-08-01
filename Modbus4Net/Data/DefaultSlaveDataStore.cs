@@ -2,17 +2,12 @@
 {
     internal class DefaultSlaveDataStore : ISlaveDataStore
     {
-        private readonly IPointSource<ushort> _holdingRegisters = new DefaultPointSource<ushort>();
-        private readonly IPointSource<ushort> _inputRegisters = new DefaultPointSource<ushort>();
-        private readonly IPointSource<bool> _coilDiscretes = new DefaultPointSource<bool>();
-        private readonly IPointSource<bool> _coilInputs = new DefaultPointSource<bool>();
+        public IPointSource<ushort> HoldingRegisters { get; } = new DefaultPointSource<ushort>();
 
-        public IPointSource<ushort> HoldingRegisters => _holdingRegisters;
+        public IPointSource<ushort> InputRegisters { get; } = new DefaultPointSource<ushort>();
 
-        public IPointSource<ushort> InputRegisters => _inputRegisters;
+        public IPointSource<bool> CoilDiscretes { get; } = new DefaultPointSource<bool>();
 
-        public IPointSource<bool> CoilDiscretes => _coilDiscretes;
-
-        public IPointSource<bool> CoilInputs => _coilInputs;
+        public IPointSource<bool> CoilInputs { get; } = new DefaultPointSource<bool>();
     }
 }
