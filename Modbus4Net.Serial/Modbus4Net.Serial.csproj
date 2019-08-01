@@ -4,6 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Modbus4NetPrivateKey.snk</AssemblyOriginatorKeyFile>
+    <Description>a C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports serial ASCII and serial RTU protocols.</Description>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageTags>modbus;modbus4net;rtu;ascii;serial;master;slave;coreclr</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/gsulc/Modbus4Net</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/gsulc/Modbus4Net</PackageProjectUrl>
+    <Authors>Dmitry Turin, Rich Quackenbush, Jesse Beard, Gordon Sulc</Authors>
+    <Company>Modbus4Net</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,6 +21,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Modbus4Net\Modbus4Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

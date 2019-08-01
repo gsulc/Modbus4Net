@@ -5,6 +5,15 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Modbus4NetPrivateKey.snk</AssemblyOriginatorKeyFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/gsulc/Modbus4Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/gsulc/Modbus4Net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Copyright />
+    <Description>A C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports TCP, and UDP protocols.</Description>
+    <PackageTags>modbus;modbus4net;tcp;udp;master;slave;coreclr</PackageTags>
+    <Authors>Dmitry Turin, Rich Quackenbush, Jesse Beard, Gordon Sulc</Authors>
+    <Company>Modbus4Net</Company>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
