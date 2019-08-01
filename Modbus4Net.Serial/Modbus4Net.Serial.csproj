@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Modbus4NetPrivateKey.snk</AssemblyOriginatorKeyFile>
     <Description>a C# implementation of the Modbus protocol. Provides connectivity to Modbus slave compatible devices and applications. Supports serial ASCII and serial RTU protocols.</Description>

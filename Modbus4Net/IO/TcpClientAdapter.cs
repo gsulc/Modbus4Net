@@ -55,7 +55,8 @@ namespace Modbus4Net.IO
             if (_tcpClient == null || !_tcpClient.Connected)
             {
                 if (_tcpClient != null)
-                    _tcpClient.Dispose();
+                    Disconnect();
+                    
                 _tcpClient = new TcpClient();
                 _tcpClient.Client.Connect(Hostname, Port);
             }
@@ -63,7 +64,11 @@ namespace Modbus4Net.IO
 
         public void Disconnect()
         {
-            _tcpClient.Dispose();
+#if NET45
+                    _tcpClient.Close();
+#elif NETSTANDARD16
+                    _tcpClient.Dispose();
+#endif
         }
 
         public void Write(byte[] buffer, int offset, int size)
@@ -109,7 +114,7 @@ namespace Modbus4Net.IO
         {
             if (disposing)
             {
-                _tcpClient.Dispose();
+                Disconnect();
             }
         }
     }
