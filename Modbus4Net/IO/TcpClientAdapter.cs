@@ -1,24 +1,40 @@
-﻿using Modbus4Net.Unme.Common;
-using System;
+﻿using System;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
 namespace Modbus4Net.IO
 {
-    /// <summary>
-    /// Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
-    /// </summary>
     public class TcpClientAdapter : IStreamResource
     {
         private TcpClient _tcpClient;
 
-        public TcpClientAdapter(TcpClient tcpClient)
+        public TcpClientAdapter(string hostname, int port)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(hostname), "Argument hostname cannot be null or empty.");
+
+            Hostname = hostname;
+            Port = port;
+        }
+
+        internal TcpClientAdapter(TcpClient tcpClient)
         {
             Debug.Assert(tcpClient != null, "Argument tcpClient cannot be null.");
-
             _tcpClient = tcpClient;
+            var endpoint = (IPEndPoint)tcpClient.Client.RemoteEndPoint;
+            if (endpoint != null)
+            {
+                Hostname = endpoint.Address.ToString();
+                Port = endpoint.Port;
+            }
         }
+
+        public string Hostname { get; private set; }
+
+        public int Port { get; private set; }
+
+        public bool Connected => _tcpClient != null && _tcpClient.Connected;
 
         public int InfiniteTimeout => Timeout.Infinite;
 
@@ -34,19 +50,53 @@ namespace Modbus4Net.IO
             set => _tcpClient.GetStream().WriteTimeout = value;
         }
 
+        public void Connect()
+        {
+            if (_tcpClient == null || !_tcpClient.Connected)
+            {
+                if (_tcpClient != null)
+                    _tcpClient.Dispose();
+                _tcpClient = new TcpClient();
+                _tcpClient.Client.Connect(Hostname, Port);
+            }
+        }
+
+        public void Disconnect()
+        {
+            _tcpClient.Dispose();
+        }
+
         public void Write(byte[] buffer, int offset, int size)
         {
-            _tcpClient.GetStream().Write(buffer, offset, size);
+            GetStream().Write(buffer, offset, size);
         }
 
         public int Read(byte[] buffer, int offset, int size)
         {
-            return _tcpClient.GetStream().Read(buffer, offset, size);
+            return GetStream().Read(buffer, offset, size);
         }
 
         public void DiscardInBuffer()
         {
-            _tcpClient.GetStream().Flush();
+            GetStream().Flush();
+        }
+
+        private NetworkStream GetStream()
+        {
+            try
+            {
+                return _tcpClient.GetStream();
+            }
+            catch (ObjectDisposedException) // the client has been closed
+            {
+                _tcpClient = new TcpClient();
+                Connect();
+            }
+            catch (InvalidOperationException) // not connected to a remote host
+            {
+                Connect();
+            }
+            return _tcpClient.GetStream();
         }
 
         public void Dispose()
@@ -59,7 +109,7 @@ namespace Modbus4Net.IO
         {
             if (disposing)
             {
-                DisposableUtility.Dispose(ref _tcpClient);
+                _tcpClient.Dispose();
             }
         }
     }

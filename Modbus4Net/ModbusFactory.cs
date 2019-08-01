@@ -116,16 +116,30 @@ namespace Modbus4Net
             return new ModbusSerialMaster(transport);
         }
 
-        public IModbusMaster CreateMaster(UdpClient client)
+        public IModbusMaster CreateMaster(UdpClient udpClient)
         {
-            var adapter = new UdpClientAdapter(client);
+            var adapter = new UdpClientAdapter(udpClient);
             var transport = new ModbusIpTransport(adapter, this, Logger);
             return new ModbusIpMaster(transport);
         }
 
-        public IModbusMaster CreateMaster(TcpClient client)
+        public IModbusMaster CreateMaster(TcpClient tcpClient)
         {
-            var adapter = new TcpClientAdapter(client);
+            var adapter = new TcpClientAdapter(tcpClient);
+            var transport = new ModbusIpTransport(adapter, this, Logger);
+            return new ModbusIpMaster(transport);
+        }
+
+        public IModbusMaster CreateTcpMaster(string hostname, int port)
+        {
+            var adapter = new TcpClientAdapter(hostname, port);
+            var transport = new ModbusIpTransport(adapter, this, Logger);
+            return new ModbusIpMaster(transport);
+        }
+
+        public IModbusMaster CreateUdpMaster(string hostname, int port)
+        {
+            var adapter = new UdpClientAdapter(hostname, port);
             var transport = new ModbusIpTransport(adapter, this, Logger);
             return new ModbusIpMaster(transport);
         }

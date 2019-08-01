@@ -9,6 +9,21 @@ namespace Modbus4Net.IO
     public interface IStreamResource : IDisposable
     {
         /// <summary>
+        /// Forms a connection.
+        /// </summary>
+        void Connect();
+
+        /// <summary>
+        /// Removes the connection.
+        /// </summary>
+        void Disconnect();
+
+        /// <summary>
+        /// Connection state.
+        /// </summary>
+        bool Connected { get; }
+
+        /// <summary>
         /// Indicates that no timeout should occur.
         /// </summary>
         int InfiniteTimeout { get; }

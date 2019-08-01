@@ -5,9 +5,6 @@ using System.IO.Ports;
 
 namespace Modbus4Net.Serial
 {
-    /// <summary>
-    /// Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
-    /// </summary>
     public class SerialPortAdapter : IStreamResource
     {
         private const string NewLine = "\r\n";
@@ -20,6 +17,8 @@ namespace Modbus4Net.Serial
             _serialPort = serialPort;
             _serialPort.NewLine = NewLine;
         }
+
+        public bool Connected => _serialPort.IsOpen;
 
         public int InfiniteTimeout => SerialPort.InfiniteTimeout;
 
@@ -35,6 +34,16 @@ namespace Modbus4Net.Serial
             set => _serialPort.WriteTimeout = value;
         }
 
+        public void Connect()
+        {
+            _serialPort.Open();
+        }
+
+        public void Disconnect()
+        {
+            _serialPort.Close();
+        }
+
         public void DiscardInBuffer()
         {
             _serialPort.DiscardInBuffer();
@@ -42,12 +51,36 @@ namespace Modbus4Net.Serial
 
         public int Read(byte[] buffer, int offset, int count)
         {
-            return _serialPort.Read(buffer, offset, count);
+            try
+            {
+                return _serialPort.Read(buffer, offset, count);
+            }
+            catch
+            {
+                if (!Connected)
+                {
+                    Connect();
+                    return _serialPort.Read(buffer, offset, count);
+                }
+                throw;
+            }
         }
 
         public void Write(byte[] buffer, int offset, int count)
         {
-            _serialPort.Write(buffer, offset, count);
+            try
+            {
+                _serialPort.Write(buffer, offset, count);
+            }
+            catch
+            {
+                if (!Connected)
+                {
+                    Connect();
+                    _serialPort.Write(buffer, offset, count);
+                }
+                throw;
+            }
         }
 
         public void Dispose()

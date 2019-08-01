@@ -1,15 +1,12 @@
-﻿using Modbus4Net.Unme.Common;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
 namespace Modbus4Net.IO
 {
-    /// <summary>
-    /// Concrete Implementor - http://en.wikipedia.org/wiki/Bridge_Pattern
-    /// </summary>
     public class UdpClientAdapter : IStreamResource
     {
         // strategy for cross platform r/w
@@ -18,10 +15,28 @@ namespace Modbus4Net.IO
         private readonly byte[] _buffer = new byte[MaxBufferSize];
         private int _bufferOffset;
 
+        public UdpClientAdapter(string hostname, int port)
+        {
+            Hostname = hostname;
+            Port = port;
+        }
+
         public UdpClientAdapter(UdpClient udpClient)
         {
             _udpClient = udpClient ?? throw new ArgumentNullException(nameof(udpClient));
+            var endpoint = (IPEndPoint)_udpClient.Client.RemoteEndPoint;
+            if (endpoint != null)
+            {
+                Hostname = endpoint.Address.ToString();
+                Port = endpoint.Port;
+            }
         }
+
+        public string Hostname { get; private set; }
+
+        public int Port { get; private set; }
+
+        public bool Connected => _udpClient != null && _udpClient.Client.Connected;
 
         public int InfiniteTimeout => Timeout.Infinite;
 
@@ -37,6 +52,19 @@ namespace Modbus4Net.IO
             set => _udpClient.Client.SendTimeout = value;
         }
 
+        public void Connect()
+        {
+            if (_udpClient == null)
+                _udpClient = new UdpClient(Port);
+            if (!_udpClient.Client.Connected)
+                _udpClient.Client.Connect(Hostname, Port);
+        }
+
+        public void Disconnect()
+        {
+            _udpClient.Dispose();
+        }
+
         public void DiscardInBuffer()
         {
             // no-op
@@ -44,36 +72,10 @@ namespace Modbus4Net.IO
 
         public int Read(byte[] buffer, int offset, int count)
         {
-            if (buffer == null)
-                throw new ArgumentNullException(nameof(buffer));
+            VerifyArgs(buffer, offset, count);
 
-            if (offset < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(offset),
-                    "Argument offset must be greater than or equal to 0.");
-            }
-
-            if (offset > buffer.Length)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(offset),
-                    "Argument offset cannot be greater than the length of buffer.");
-            }
-
-            if (count < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(count),
-                    "Argument count must be greater than or equal to 0.");
-            }
-
-            if (count > buffer.Length - offset)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(count),
-                    "Argument count cannot be greater than the length of buffer minus offset.");
-            }
+            if (!Connected)
+                Connect();
 
             if (_bufferOffset == 0)
                 _bufferOffset = _udpClient.Client.Receive(_buffer);
@@ -90,6 +92,16 @@ namespace Modbus4Net.IO
 
         public void Write(byte[] buffer, int offset, int count)
         {
+            VerifyArgs(buffer, offset, count);
+
+            if (!Connected)
+                Connect();
+
+            _udpClient.Client.Send(buffer.Skip(offset).Take(count).ToArray());
+        }
+
+        private void VerifyArgs(byte[] buffer, int offset, int count)
+        {
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));
 
@@ -120,8 +132,6 @@ namespace Modbus4Net.IO
                     nameof(count),
                     "Argument count cannot be greater than the length of buffer minus offset.");
             }
-
-            _udpClient.Client.Send(buffer.Skip(offset).Take(count).ToArray());
         }
 
         public void Dispose()
@@ -134,7 +144,7 @@ namespace Modbus4Net.IO
         {
             if (disposing)
             {
-                DisposableUtility.Dispose(ref _udpClient);
+                _udpClient.Dispose();
             }
         }
     }
