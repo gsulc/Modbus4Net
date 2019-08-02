@@ -14,6 +14,7 @@
     <Authors>Dmitry Turin, Rich Quackenbush, Jesse Beard, Gordon Sulc</Authors>
     <Company>Modbus4Net</Company>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

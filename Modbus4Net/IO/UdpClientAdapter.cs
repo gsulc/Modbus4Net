@@ -19,6 +19,7 @@ namespace Modbus4Net.IO
         {
             Hostname = hostname;
             Port = port;
+            _udpClient = new UdpClient(port);
         }
 
         public UdpClientAdapter(UdpClient udpClient)

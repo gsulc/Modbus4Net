@@ -92,9 +92,12 @@ namespace Modbus4Net.IO
             {
                 return _tcpClient.GetStream();
             }
+            catch (NullReferenceException) // the client hasn't been created yet
+            {
+                Connect();
+            }
             catch (ObjectDisposedException) // the client has been closed
             {
-                _tcpClient = new TcpClient();
                 Connect();
             }
             catch (InvalidOperationException) // not connected to a remote host
