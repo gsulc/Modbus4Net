@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.IO.Ports;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.Serial
 {
@@ -66,6 +67,23 @@ namespace Modbus4Net.Serial
             }
         }
 
+        public Task<int> ReadAsync(byte[] buffer, int offset, int count)
+        {
+            try
+            {
+                return _serialPort.BaseStream.ReadAsync(buffer, offset, count);
+            }
+            catch
+            {
+                if (!Connected)
+                {
+                    Connect();
+                    return _serialPort.BaseStream.ReadAsync(buffer, offset, count);
+                }
+                throw;
+            }
+        }
+
         public void Write(byte[] buffer, int offset, int count)
         {
             try
@@ -78,6 +96,23 @@ namespace Modbus4Net.Serial
                 {
                     Connect();
                     _serialPort.Write(buffer, offset, count);
+                }
+                throw;
+            }
+        }
+
+        public Task WriteAsync(byte[] buffer, int offset, int count)
+        {
+            try
+            {
+                return _serialPort.BaseStream.WriteAsync(buffer, offset, count);
+            }
+            catch
+            {
+                if (!Connected)
+                {
+                    Connect();
+                    return _serialPort.BaseStream.WriteAsync(buffer, offset, count);
                 }
                 throw;
             }

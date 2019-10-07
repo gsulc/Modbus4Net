@@ -1,6 +1,7 @@
 ﻿using Modbus4Net.Logging;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
@@ -34,6 +35,17 @@ namespace Modbus4Net.IO
             Logger.LogFrameTx(frame);
 
             StreamResource.Write(frame, 0, frame.Length);
+        }
+
+        public override Task WriteAsync(IModbusMessage message)
+        {
+            DiscardInBuffer();
+
+            byte[] frame = BuildMessageFrame(message);
+
+            Logger.LogFrameTx(frame);
+
+            return StreamResource.WriteAsync(frame, 0, frame.Length);
         }
 
         public override IModbusMessage CreateResponse<T>(byte[] frame)

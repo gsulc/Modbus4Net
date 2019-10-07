@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
@@ -76,9 +77,19 @@ namespace Modbus4Net.IO
             GetStream().Write(buffer, offset, size);
         }
 
+        public Task WriteAsync(byte[] buffer, int offset, int size)
+        {
+            return GetStream().WriteAsync(buffer, offset, size);
+        }
+
         public int Read(byte[] buffer, int offset, int size)
         {
             return GetStream().Read(buffer, offset, size);
+        }
+
+        public Task<int> ReadAsync(byte[] buffer, int offset, int size)
+        {
+            return GetStream().ReadAsync(buffer, offset, size);
         }
 
         public void DiscardInBuffer()

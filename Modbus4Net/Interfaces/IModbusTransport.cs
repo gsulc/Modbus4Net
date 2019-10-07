@@ -1,5 +1,6 @@
 ﻿using Modbus4Net.IO;
 using System;
+using System.Threading.Tasks;
 
 namespace Modbus4Net
 {
@@ -19,11 +20,17 @@ namespace Modbus4Net
 
         T UnicastMessage<T>(IModbusMessage message) where T : IModbusMessage, new();
 
+        Task<T> UnicastMessageAsync<T>(IModbusMessage message) where T : IModbusMessage, new();
+
         byte[] ReadRequest();
+
+        Task<byte[]> ReadRequestAsync();
 
         byte[] BuildMessageFrame(IModbusMessage message);
 
         void Write(IModbusMessage message);
+
+        Task WriteAsync(IModbusMessage message);
 
         IStreamResource StreamResource { get; }
     }

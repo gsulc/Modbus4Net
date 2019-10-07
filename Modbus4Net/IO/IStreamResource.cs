@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
@@ -52,6 +53,8 @@ namespace Modbus4Net.IO
         /// <returns>The number of bytes read.</returns>
         int Read(byte[] buffer, int offset, int count);
 
+        Task<int> ReadAsync(byte[] buffer, int offset, int count);
+
         /// <summary>
         /// Writes a specified number of bytes to the port from an output buffer, starting at the specified offset.
         /// </summary>
@@ -59,5 +62,7 @@ namespace Modbus4Net.IO
         /// <param name="offset">The offset in the buffer array to begin writing.</param>
         /// <param name="count">The number of bytes to write.</param>
         void Write(byte[] buffer, int offset, int count);
+
+        Task WriteAsync(byte[] buffer, int offset, int count);
     }
 }

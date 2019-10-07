@@ -4,15 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
     public class UdpClientAdapter : IStreamResource
     {
         // strategy for cross platform r/w
-        private const int MaxBufferSize = ushort.MaxValue;
+        private const int MaxBufferSize = ushort.MaxValue; // this doesn't seem right
         private UdpClient _udpClient;
-        private readonly byte[] _buffer = new byte[MaxBufferSize];
+        private byte[] _buffer = new byte[MaxBufferSize];
         private int _bufferOffset;
 
         public UdpClientAdapter(string hostname, int port)
@@ -95,6 +96,30 @@ namespace Modbus4Net.IO
             return count;
         }
 
+        public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
+        {
+            VerifyArgs(buffer, offset, count);
+
+            if (!Connected)
+                Connect();
+            
+            if (_bufferOffset == 0)
+            {
+                var result = await _udpClient.ReceiveAsync();
+                _buffer = result.Buffer;
+                _bufferOffset = result.Buffer.Length;
+            }
+
+            if (_bufferOffset < count)
+                throw new IOException("Not enough bytes in the datagram.");
+
+            Buffer.BlockCopy(_buffer, 0, buffer, offset, count);
+            _bufferOffset -= count;
+            Buffer.BlockCopy(_buffer, count, _buffer, 0, _bufferOffset);
+
+            return count;
+        }
+
         public void Write(byte[] buffer, int offset, int count)
         {
             VerifyArgs(buffer, offset, count);
@@ -103,6 +128,17 @@ namespace Modbus4Net.IO
                 Connect();
 
             _udpClient.Client.Send(buffer.Skip(offset).Take(count).ToArray());
+        }
+
+        public Task WriteAsync(byte[] buffer, int offset, int count)
+        {
+            VerifyArgs(buffer, offset, count);
+
+            if (!Connected)
+                Connect();
+
+            byte[] bytes = buffer.Skip(offset).Take(count).ToArray();
+            return _udpClient.SendAsync(bytes, count, Hostname, Port);
         }
 
         private void VerifyArgs(byte[] buffer, int offset, int count)

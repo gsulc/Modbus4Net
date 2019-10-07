@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
@@ -68,6 +69,64 @@ namespace Modbus4Net.IO
             return frame;
         }
 
+        public static async Task<byte[]> ReadRequestResponseAsync(IStreamResource streamResource, IModbusLogger logger)
+        {
+            if (streamResource == null)
+                throw new ArgumentNullException(nameof(streamResource));
+            if (logger == null)
+                throw new ArgumentNullException(nameof(logger));
+            
+            byte[] mbapHeader = await ReadHeaderAsync(streamResource);
+            logger.Debug($"MBAP header: {string.Join(", ", mbapHeader)}");
+
+            ushort frameLength = (ushort)IPAddress.HostToNetworkOrder(BitConverter.ToInt16(mbapHeader, 4));
+            logger.Debug($"{frameLength} bytes in PDU.");
+            
+            byte[] messageFrame = await ReadMessageAsync(streamResource, frameLength);
+            logger.Debug($"PDU: {frameLength}");
+
+            byte[] frame = mbapHeader.Concat(messageFrame).ToArray();
+            logger.Debug($"RX: {string.Join(", ", frame)}");
+
+            return frame;
+        }
+
+        private static async Task<byte[]> ReadHeaderAsync(IStreamResource streamResource)
+        {
+            byte[] mbapHeader = new byte[6];
+            int numBytesRead = 0;
+
+            while (numBytesRead != 6)
+            {
+                int bRead = await streamResource.ReadAsync(mbapHeader, numBytesRead, 6 - numBytesRead);
+
+                if (bRead == 0)
+                    throw new IOException("Read resulted in 0 bytes returned.");
+
+                numBytesRead += bRead;
+            }
+
+            return mbapHeader;
+        }
+
+        private static async Task<byte[]> ReadMessageAsync(IStreamResource streamResource, ushort frameLength)
+        {
+            byte[] messageFrame = new byte[frameLength];
+            int numBytesRead = 0;
+
+            while (numBytesRead != frameLength)
+            {
+                int bRead = await streamResource.ReadAsync(messageFrame, numBytesRead, frameLength - numBytesRead);
+
+                if (bRead == 0)
+                    throw new IOException("Read resulted in 0 bytes returned.");
+
+                numBytesRead += bRead;
+            }
+
+            return messageFrame;
+        }
+
         public static byte[] GetMbapHeader(IModbusMessage message)
         {
             byte[] transactionId = BitConverter.GetBytes(IPAddress.HostToNetworkOrder((short)message.TransactionId));
@@ -123,11 +182,21 @@ namespace Modbus4Net.IO
         public override void Write(IModbusMessage message)
         {
             message.TransactionId = GetNewTransactionId();
-            byte[] frame = BuildMessageFrame(message);
+            byte[] frame = BuildMessageFrame(message); // what is the point of this being abstract?
 
             Logger.LogFrameTx(frame);
 
             StreamResource.Write(frame, 0, frame.Length);
+        }
+
+        public override Task WriteAsync(IModbusMessage message)
+        {
+            message.TransactionId = GetNewTransactionId();
+            byte[] frame = BuildMessageFrame(message);
+
+            Logger.LogFrameTx(frame);
+
+            return StreamResource.WriteAsync(frame, 0, frame.Length);
         }
 
         public override byte[] ReadRequest()
@@ -135,9 +204,20 @@ namespace Modbus4Net.IO
             return ReadRequestResponse(StreamResource, Logger);
         }
 
+        public override Task<byte[]> ReadRequestAsync()
+        {
+            return ReadRequestResponseAsync(StreamResource, Logger);
+        }
+
         public override IModbusMessage ReadResponse<T>()
         {
             return CreateMessageAndInitializeTransactionId<T>(ReadRequestResponse(StreamResource, Logger));
+        }
+
+        public override async Task<IModbusMessage> ReadResponseAsync<T>()
+        {
+            byte[] response = await ReadRequestResponseAsync(StreamResource, Logger);
+            return CreateMessageAndInitializeTransactionId<T>(response);
         }
 
         public override void OnValidateResponse(IModbusMessage request, IModbusMessage response)

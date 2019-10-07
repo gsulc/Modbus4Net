@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
@@ -56,6 +57,17 @@ namespace Modbus4Net.IO
             return frameBytes;
         }
 
+        public virtual async Task<byte[]> ReadAsync(int count)
+        {
+            byte[] frameBytes = new byte[count];
+            int numBytesRead = 0;
+
+            while (numBytesRead != count)
+                numBytesRead += await StreamResource.ReadAsync(frameBytes, numBytesRead, count - numBytesRead);
+
+            return frameBytes;
+        }
+
         public override byte[] BuildMessageFrame(IModbusMessage message)
         {
             byte[] messageFrame = message.MessageFrame;
@@ -83,10 +95,26 @@ namespace Modbus4Net.IO
             return CreateResponse<T>(frame);
         }
 
+        public override async Task<IModbusMessage> ReadResponseAsync<T>()
+        {
+            byte[] frame = await ReadResponseAsync();
+            Logger.LogFrameRx(frame);
+            return CreateResponse<T>(frame);
+        }
+
         private byte[] ReadResponse()
         {
             byte[] frameStart = Read(ResponseFrameStartLength);
             byte[] frameEnd = Read(ResponseBytesToRead(frameStart));
+            byte[] frame = frameStart.Concat(frameEnd).ToArray();
+
+            return frame;
+        }
+
+        private async Task<byte[]> ReadResponseAsync()
+        {
+            byte[] frameStart = await ReadAsync(ResponseFrameStartLength);
+            byte[] frameEnd = await ReadAsync(ResponseBytesToRead(frameStart));
             byte[] frame = frameStart.Concat(frameEnd).ToArray();
 
             return frame;
@@ -103,6 +131,17 @@ namespace Modbus4Net.IO
         {
             byte[] frameStart = Read(RequestFrameStartLength);
             byte[] frameEnd = Read(RequestBytesToRead(frameStart));
+            byte[] frame = frameStart.Concat(frameEnd).ToArray();
+
+            Logger.LogFrameRx(frame);
+
+            return frame;
+        }
+
+        public override async Task<byte[]> ReadRequestAsync()
+        {
+            byte[] frameStart = await ReadAsync(RequestFrameStartLength);
+            byte[] frameEnd = await ReadAsync(RequestBytesToRead(frameStart));
             byte[] frame = frameStart.Concat(frameEnd).ToArray();
 
             Logger.LogFrameRx(frame);

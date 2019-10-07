@@ -402,9 +402,11 @@ namespace Modbus4Net.Device
             return response.Data.Take(request.NumberOfPoints).ToArray();
         }
 
-        private Task<bool[]> PerformReadDiscretesAsync(ReadCoilsInputsRequest request)
+        private async Task<bool[]> PerformReadDiscretesAsync(ReadCoilsInputsRequest request)
         {
-            return Task.Factory.StartNew(() => PerformReadDiscretes(request));
+            ReadCoilsInputsResponse response = 
+                await Transport.UnicastMessageAsync<ReadCoilsInputsResponse>(request);
+            return response.Data.Take(request.NumberOfPoints).ToArray();
         }
 
         private ushort[] PerformReadRegisters(ReadHoldingInputRegistersRequest request)
@@ -415,9 +417,12 @@ namespace Modbus4Net.Device
             return response.Data.Take(request.NumberOfPoints).ToArray();
         }
 
-        private Task<ushort[]> PerformReadRegistersAsync(ReadHoldingInputRegistersRequest request)
+        private async Task<ushort[]> PerformReadRegistersAsync(ReadHoldingInputRegistersRequest request)
         {
-            return Task.Factory.StartNew(() => PerformReadRegisters(request));
+            ReadHoldingInputRegistersResponse response =
+                await Transport.UnicastMessageAsync<ReadHoldingInputRegistersResponse>(request);
+
+            return response.Data.Take(request.NumberOfPoints).ToArray();
         }
 
         private ushort[] PerformReadRegisters(ReadWriteMultipleRegistersRequest request)
@@ -428,15 +433,18 @@ namespace Modbus4Net.Device
             return response.Data.Take(request.ReadRequest.NumberOfPoints).ToArray();
         }
 
-        private Task<ushort[]> PerformReadRegistersAsync(ReadWriteMultipleRegistersRequest request)
+        private async Task<ushort[]> PerformReadRegistersAsync(ReadWriteMultipleRegistersRequest request)
         {
-            return Task.Factory.StartNew(() => PerformReadRegisters(request));
+            ReadHoldingInputRegistersResponse response =
+                await Transport.UnicastMessageAsync<ReadHoldingInputRegistersResponse>(request);
+
+            return response.Data.Take(request.ReadRequest.NumberOfPoints).ToArray();
         }
 
         private Task PerformWriteRequestAsync<T>(IModbusMessage request)
             where T : IModbusMessage, new()
         {
-            return Task.Factory.StartNew(() => Transport.UnicastMessage<T>(request));
+            return Transport.UnicastMessageAsync<T>(request);
         }
     }
 }

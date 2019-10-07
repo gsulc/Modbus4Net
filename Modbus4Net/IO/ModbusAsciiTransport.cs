@@ -3,6 +3,7 @@ using Modbus4Net.Utility;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
@@ -44,15 +45,40 @@ namespace Modbus4Net.IO
             return ReadRequestResponse();
         }
 
+        public override Task<byte[]> ReadRequestAsync()
+        {
+            return ReadRequestResponseAsync();
+        }
+
         public override IModbusMessage ReadResponse<T>()
         {
             return CreateResponse<T>(ReadRequestResponse());
+        }
+
+        public override async Task<IModbusMessage> ReadResponseAsync<T>()
+        {
+            var response = await ReadRequestResponseAsync();
+            return CreateResponse<T>(response);
         }
 
         internal byte[] ReadRequestResponse()
         {
             // read message frame, removing frame start ':'
             string frameHex = StreamResourceUtility.ReadLine(StreamResource).Substring(1);
+
+            byte[] frame = ModbusUtility.HexToBytes(frameHex);
+            Logger.Trace($"RX: {string.Join(", ", frame)}");
+
+            if (frame.Length < 3)
+                throw new IOException("Premature end of stream, message truncated.");
+
+            return frame;
+        }
+
+        internal async Task<byte[]> ReadRequestResponseAsync()
+        {
+            // read message frame, removing frame start ':'
+            string frameHex = (await StreamResourceUtility.ReadLineAsync(StreamResource)).Substring(1);
 
             byte[] frame = ModbusUtility.HexToBytes(frameHex);
             Logger.Trace($"RX: {string.Join(", ", frame)}");

@@ -15,7 +15,6 @@ namespace Modbus4Net.IO
     public abstract class ModbusTransport : IModbusTransport
     {
         private readonly object _syncLock = new object();
-        private int _retries = Modbus.DefaultRetries;
         private int _waitToRetryMilliseconds = Modbus.DefaultWaitToRetryMilliseconds;
         private IStreamResource _streamResource;
 
@@ -38,11 +37,7 @@ namespace Modbus4Net.IO
         /// Number of times to retry sending message after encountering a failure such as an IOException,
         /// TimeoutException, or a corrupt message.
         /// </summary>
-        public int Retries
-        {
-            get => _retries;
-            set => _retries = value;
-        }
+        public int Retries { get; set; } = Modbus.DefaultRetries;
 
         /// <summary>
         /// If non-zero, this will cause a second reply to be read if the first is behind the sequence number of the
@@ -112,6 +107,7 @@ namespace Modbus4Net.IO
             GC.SuppressFinalize(this);
         }
 
+        // TODO: break this down
         public virtual T UnicastMessage<T>(IModbusMessage message)
             where T : IModbusMessage, new()
         {
@@ -165,8 +161,7 @@ namespace Modbus4Net.IO
                     if (se.SlaveExceptionCode != SlaveExceptionCodes.SlaveDeviceBusy)
                         throw;
 
-                    if (SlaveBusyUsesRetryCount && attempt++ > _retries)
-
+                    if (SlaveBusyUsesRetryCount && attempt++ > Retries)
                         throw;
 
                     Logger.Warning($"Received SLAVE_DEVICE_BUSY exception response, waiting {_waitToRetryMilliseconds} milliseconds and resubmitting request.");
@@ -183,9 +178,91 @@ namespace Modbus4Net.IO
                              e is TimeoutException ||
                              e is IOException)
                     {
-                        Logger.Error($"{e.GetType().Name}, {(_retries - attempt + 1)} retries remaining - {e}");
+                        Logger.Error($"{e.GetType().Name}, {(Retries - attempt + 1)} retries remaining - {e}");
 
-                        if (attempt++ > _retries)
+                        if (attempt++ > Retries)
+                            throw;
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            } while (!success);
+
+            return (T)response;
+        }
+
+        public virtual async Task<T> UnicastMessageAsync<T>(IModbusMessage message)
+            where T : IModbusMessage, new()
+        {
+            IModbusMessage response = null;
+            int attempt = 1;
+            bool success = false;
+
+            do
+            {
+                try
+                {
+                    Write(message);
+
+                    bool readAgain;
+                    do
+                    {
+                        readAgain = false;
+                        response = await ReadResponseAsync<T>();
+                        var exceptionResponse = response as SlaveExceptionResponse;
+
+                        if (exceptionResponse != null)
+                        {
+                            // if SlaveExceptionCode == ACKNOWLEDGE we retry reading the response without resubmitting request
+                            readAgain = exceptionResponse.SlaveExceptionCode == SlaveExceptionCodes.Acknowledge;
+
+                            if (readAgain)
+                            {
+                                Logger.Debug($"Received ACKNOWLEDGE slave exception response, waiting {_waitToRetryMilliseconds} milliseconds and retrying to read response.");
+                                Sleep(WaitToRetryMilliseconds);
+                            }
+                            else
+                            {
+                                throw new SlaveException(exceptionResponse);
+                            }
+                        }
+                        else if (ShouldRetryResponse(message, response))
+                        {
+                            readAgain = true;
+                        }
+                    }
+                    while (readAgain);
+
+                    ValidateResponse(message, response);
+                    success = true;
+                }
+                catch (SlaveException se)
+                {
+                    if (se.SlaveExceptionCode != SlaveExceptionCodes.SlaveDeviceBusy)
+                        throw;
+
+                    if (SlaveBusyUsesRetryCount && attempt++ > Retries)
+                        throw;
+
+                    Logger.Warning($"Received SLAVE_DEVICE_BUSY exception response, waiting {_waitToRetryMilliseconds} milliseconds and resubmitting request.");
+                    Sleep(WaitToRetryMilliseconds);
+                }
+                catch (Exception e)
+                {
+                    if (e is SocketException || e.InnerException is SocketException)
+                    {
+                        throw;
+                    }
+                    else if (e is FormatException ||
+                             e is NotImplementedException ||
+                             e is TimeoutException ||
+                             e is IOException)
+                    {
+                        Logger.Error($"{e.GetType().Name}, {(Retries - attempt + 1)} retries remaining - {e}");
+
+                        if (attempt++ > Retries)
                             throw;
                     }
                     else
@@ -267,12 +344,19 @@ namespace Modbus4Net.IO
 
         public abstract byte[] ReadRequest();
 
+        public abstract Task<byte[]> ReadRequestAsync();
+
         public abstract IModbusMessage ReadResponse<T>()
+            where T : IModbusMessage, new();
+
+        public abstract Task<IModbusMessage> ReadResponseAsync<T>()
             where T : IModbusMessage, new();
 
         public abstract byte[] BuildMessageFrame(IModbusMessage message);
 
         public abstract void Write(IModbusMessage message);
+
+        public abstract Task WriteAsync(IModbusMessage message);
 
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources
@@ -288,7 +372,7 @@ namespace Modbus4Net.IO
                 DisposableUtility.Dispose(ref _streamResource);
             }
         }
-
+        
         private static void Sleep(int millisecondsTimeout)
         {
             Task.Delay(millisecondsTimeout).Wait();

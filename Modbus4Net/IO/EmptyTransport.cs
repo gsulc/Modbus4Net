@@ -1,5 +1,6 @@
 ﻿using Modbus4Net.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace Modbus4Net.IO
 {
@@ -31,6 +32,21 @@ namespace Modbus4Net.IO
         }
 
         public override void OnValidateResponse(IModbusMessage request, IModbusMessage response)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<byte[]> ReadRequestAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task<IModbusMessage> ReadResponseAsync<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task WriteAsync(IModbusMessage message)
         {
             throw new NotImplementedException();
         }
