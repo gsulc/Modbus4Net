@@ -65,9 +65,9 @@ namespace Modbus4Net.IO
         public void Disconnect()
         {
 #if NET45
-                    _udpClient.Close();
-#elif NETSTANDARD16
-                    _udpClient.Dispose();
+            _udpClient.Close();
+#elif NETSTANDARD1_3
+            _udpClient.Dispose();
 #endif
         }
 
